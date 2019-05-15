@@ -8,6 +8,6 @@ BinaryTree<T> = BNode(T item, BinaryTree<T> left, BinaryTree<T> right) | EmptyBN
 Optional<T> = Exists(T item) | NoExists();
 Either<U, V> = Left(U item) | Right(V item);
 
-ContactInfomation = Mail(String address, String region, String city, String country, String postalCode) 
+ContactInformation = Mail(String address, String region, String city, String country, String postalCode)
 	| Email(String addr) | Phone(String number) | Fax(String number);
 Person = Person(String name, LocalDate birthday, Locale prefLocale, Contact contactMethod);

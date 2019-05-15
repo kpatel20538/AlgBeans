@@ -4,35 +4,36 @@ grammar AlgBeans;
 package io.kpatel.algbeans.parser;
 }
 
-fragment WS                 : ' ' | '\n' | '\t' | '\r';
+
 fragment JAVA_LETTER        : '$' | '_' | ('A' .. 'Z') | ('a' .. 'z');
 fragment JAVA_LETTER_NUMBER : '0' .. '9' | JAVA_LETTER ;
-fragment JAVA_IDENTIFIER    : JAVA_LETTER JAVA_LETTER_NUMBER*;
 
-LINE_END       : WS* ';';
-ASSIGN         : WS* '=' ;
-UNION          : WS* '|' ;
-TP_START       : WS* '<' ;
-TP_END         : WS* '>' ;
-P_START        : WS* '(' ;
-P_END          : WS* ')' ;
-COMMA          : WS* ',' ;
-SPACE          : ' ' | '\t';
-END            : WS* EOF;
-PACKAGE        : WS* 'package' SPACE;
-IMPORT         : WS* 'import' SPACE;
-IDENTIFIER     : WS* JAVA_IDENTIFIER;
-QUALIFIED_NAME : WS* JAVA_IDENTIFIER ('.' JAVA_IDENTIFIER)*;
 
-document     : packageLine? importLine* typeLine* END;
+SPACE           : ' ' | '\t';
+WS              : ' ' | '\n' | '\t' | '\r';
+LINE_END        : WS* ';';
+ASSIGN          : WS* '=' WS*;
+UNION           : WS* '|' WS*;
+TP_START        : '<' WS*;
+TP_END          : WS* '>';
+P_START         : '(' WS*;
+P_END           : WS* ')';
+COMMA           : WS* ',' WS*;
+PACKAGE         : 'package' SPACE WS*;
+IMPORT          : 'import' SPACE WS*;
+JAVA_IDENTIFIER : JAVA_LETTER JAVA_LETTER_NUMBER*;
+QUALIFIED_NAME  : JAVA_IDENTIFIER ('.' JAVA_IDENTIFIER)*;
+
+
+document     : WS* (packageLine WS*)? (importLine WS*)* (typeLine WS*)* EOF;
 packageLine  : PACKAGE QUALIFIED_NAME LINE_END;
 importLine   : IMPORT QUALIFIED_NAME LINE_END;
 
 typeLine      : type ASSIGN constructor (UNION constructor)* LINE_END;
-type          : IDENTIFIER typeParams?;
-typeParams    : TP_START IDENTIFIER (COMMA IDENTIFIER)* TP_END;
-constructor   : IDENTIFIER consParams;
-consParams    : P_START parameter (COMMA parameter)* P_END;
-parameter     : type SPACE IDENTIFIER;
+type          : JAVA_IDENTIFIER WS* typeParams?;
+typeParams    : TP_START JAVA_IDENTIFIER (COMMA JAVA_IDENTIFIER)* TP_END;
+constructor   : JAVA_IDENTIFIER WS* consParams;
+consParams    : P_START (parameter (COMMA parameter)*)? P_END;
+parameter     : type SPACE WS* JAVA_IDENTIFIER;
 
 
