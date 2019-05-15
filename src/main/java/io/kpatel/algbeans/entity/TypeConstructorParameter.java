@@ -7,12 +7,12 @@ import java.util.List;
 public class TypeConstructorParameter {
     private String className;
     private ArrayList<String> typeParameters;
-    private String identifier;
+    private String parameterName;
 
     public TypeConstructorParameter() {
         className = "";
         typeParameters = new ArrayList<>();
-        identifier = "";
+        parameterName = "";
     }
 
     public String getClassName() {
@@ -24,12 +24,12 @@ public class TypeConstructorParameter {
         return this;
     }
 
-    public String getIdentifier() {
-        return identifier;
+    public String getParameterName() {
+        return parameterName;
     }
 
-    public TypeConstructorParameter setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public TypeConstructorParameter setParameterName(String parameterName) {
+        this.parameterName = parameterName;
         return this;
     }
 
@@ -37,7 +37,7 @@ public class TypeConstructorParameter {
         return Collections.unmodifiableList(typeParameters);
     }
 
-    public TypeConstructorParameter setTypeParameters(String typeParameter) {
+    public TypeConstructorParameter addTypeParameter(String typeParameter) {
         this.typeParameters.add(typeParameter);
         return this;
     }
