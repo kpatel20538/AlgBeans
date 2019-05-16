@@ -4,36 +4,54 @@ grammar AlgBeans;
 package io.kpatel.algbeans.parser;
 }
 
-
 fragment JAVA_LETTER        : '$' | '_' | ('A' .. 'Z') | ('a' .. 'z');
 fragment JAVA_LETTER_NUMBER : '0' .. '9' | JAVA_LETTER ;
 
+WS               : [\p{White_Space}] -> skip;
+PRIMITIVE        : 'float\b' | 'double\b' | 'byte\b' | 'short\b' | 'int\b' | 'long\b' | 'char\b' | 'boolean\b';
+PACKAGE          : 'package\b';
+IMPORT           : 'import\b';
+STATIC           : 'static\b';
+EXTENDS          : 'extends\b';
+SUPER            : 'super\b';
+GLOB             : '*';
+JAVA_IDENTIFIER  : JAVA_LETTER JAVA_LETTER_NUMBER* '\b';
 
-SPACE           : ' ' | '\t';
-WS              : ' ' | '\n' | '\t' | '\r';
-LINE_END        : WS* ';';
-ASSIGN          : WS* '=' WS*;
-UNION           : WS* '|' WS*;
-TP_START        : '<' WS*;
-TP_END          : WS* '>';
-P_START         : '(' WS*;
-P_END           : WS* ')';
-COMMA           : WS* ',' WS*;
-PACKAGE         : 'package' SPACE WS*;
-IMPORT          : 'import' SPACE WS*;
-JAVA_IDENTIFIER : JAVA_LETTER JAVA_LETTER_NUMBER*;
-JAVA_PREFIX     : (JAVA_IDENTIFIER '.')*;
+document         : packageLine? importLine* unionLine* EOF;
+packageLine      : PACKAGE packageName ';';
+importLine       : IMPORT STATIC? packageName ('.' GLOB)? ';';
+unionLine        : unionType '=' productType ('|' productType)* ';';
 
-packageName     : JAVA_PREFIX JAVA_IDENTIFIER;
-document    : WS* (packageLine WS*)? (importLine WS*)* (typeLine WS*)* EOF;
-packageLine : PACKAGE packageName LINE_END;
-importLine  : IMPORT packageName LINE_END;
+/*
+ *  TODO: Class/Field Annotations
+ */
 
-typeLine    : type ASSIGN constructor (UNION constructor)* LINE_END;
-type        : JAVA_IDENTIFIER WS* typeParams?;
-typeParams  : TP_START JAVA_IDENTIFIER (COMMA JAVA_IDENTIFIER)* TP_END;
-constructor : JAVA_IDENTIFIER WS* consParams;
-consParams  : P_START (parameter (COMMA parameter)*)? P_END;
-parameter   : type SPACE WS* JAVA_IDENTIFIER;
+unionType        : JAVA_IDENTIFIER typeParameters?;
+productType      : JAVA_IDENTIFIER '(' fields? ')';
+
+/*
+ *  TODO: fieldInitializers
+ */
+
+fields    : fieldDeclaration (',' fieldDeclaration)*;
+fieldDeclaration : typeName JAVA_IDENTIFIER;
+
+
+packageName         : JAVA_IDENTIFIER ('.' JAVA_IDENTIFIER )*;
+
+typeParameters   : '<' typeParameter (',' typeParameter)* '>';
+typeParameter    : typeVariable typeBounds?;
+typeBounds       : EXTENDS referenceType ('&' referenceType)*;
+
+typeName         : (PRIMITIVE | referenceType) arraySuffix?;
+referenceType    : typeDecl ('.' typeDecl )*;
+typeDecl         : JAVA_IDENTIFIER typeArguments?;
+typeVariable     : JAVA_IDENTIFIER;
+arraySuffix      : '[' ']';
+
+typeArguments    : '<' typeArgument (',' typeArgument)* '>';
+typeArgument     : referenceType | wildcard;
+wildcard         : '?' wildcardBounds?;
+wildcardBounds   : (EXTENDS referenceType) | (SUPER referenceType);
 
 

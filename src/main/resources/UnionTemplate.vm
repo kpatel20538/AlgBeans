@@ -1,0 +1,53 @@
+#if( $union.packageName != "" )
+package $union.packageName;
+#end
+
+#foreach( $importLine in $union.imports )
+import#if( $importLine.static ) static#end $importLine.pattern;
+#end
+
+#set( $tp = $util.toTypeParameterCode($union.typeParameters) )
+#set( $ta = $util.toTypeArgumentsCode($union.typeParameters) )
+#set( $d = "$" )
+public abstract class $union.typeName<$tp> {
+    #foreach( $product in $union.productTypes )
+    public final static class $product.typeName<$tp> extends $union.typeName<$ta>{
+        #foreach( $field in $product.fields )
+        private $field.type $field.name;
+        #end
+
+        public ${product.typeName}() { }
+
+        public ${product.typeName}(${util.toParameterList($product.fields)}) {
+            #foreach( $field in $product.fields )
+            this.$field.name = $field.name;
+            #end
+        }
+
+        #foreach( $field in $product.fields )
+        public $field.type ${util.toGetterName($field)}() {
+            return $field.fieldName;
+        }
+
+        public void ${util.toSetterName($field)}($field.type $field.name) {
+            this.$field.name = $field.name;
+        }
+
+        #end
+        public <${d}T> ${d}T when(Switch<${d}T, $ta> cases) {
+            return cases.is(this);
+        }
+
+    }
+
+    #end
+    interface Switch<${d}T, $tp> {
+        #foreach( $product in $union.productTypes )
+        ${d}T is($product.typeName<$ta> case);
+        #end
+    }
+
+    ${union.typeName}() { }
+
+    public abstract <${d}T> ${d}T when(Switch<${d}T, $ta> cases);
+}
