@@ -9,5 +9,5 @@ Optional<T> = Exists(T item) | NoExists();
 Either<U, V> = Left(U item) | Right(V item);
 
 ContactInformation = Mail(String address, String region, String city, String country, String postalCode)
-	| Email(String addr) | Phone(String number) | Fax(String number);
+	| Email(String addr) | Phone(int[] number) | Fax(boolean number);
 Person = Person(String name, LocalDate birthday, Locale prefLocale, Contact contactMethod);

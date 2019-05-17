@@ -3,7 +3,7 @@ package io.kpatel.algbeans.java.element;
 
 import io.kpatel.algbeans.java.type.JavaType;
 
-public class JavaField  implements JavaVariable {
+public class JavaField implements JavaVariable {
     private JavaType type;
     private String name;
 
@@ -31,10 +31,5 @@ public class JavaField  implements JavaVariable {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%s %s", getType(), getName());
     }
 }

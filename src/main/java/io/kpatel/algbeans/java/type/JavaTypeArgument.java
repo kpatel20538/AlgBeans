@@ -1,9 +1,8 @@
 package io.kpatel.algbeans.java.type;
 
 public class JavaTypeArgument {
-
-
     public enum Bound { SPECIFIC, UNBOUNDED, EXTENDS, SUPER }
+
     private Bound bound;
     private JavaReferenceType type;
 
@@ -15,14 +14,6 @@ public class JavaTypeArgument {
     public JavaTypeArgument(Bound bound, JavaReferenceType type) {
         this.bound = bound;
         this.type = type;
-    }
-    public JavaTypeArgument(JavaReferenceType type) {
-        this.bound = Bound.SPECIFIC;
-        this.type = type;
-    }
-    public JavaTypeArgument(String simpleName) {
-        this.bound = Bound.SPECIFIC;
-        this.type = new JavaReferenceType(simpleName);
     }
 
     public Bound getBound() {

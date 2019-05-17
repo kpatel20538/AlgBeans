@@ -20,17 +20,12 @@ public enum JavaPrimitiveType implements JavaType {
     }
 
     @Override
-    public boolean isReferenceType() {
-        return false;
-    }
-
-    @Override
-    public boolean isArray() {
-        return false;
-    }
-
-    @Override
     public String toString() {
         return getTypeName();
+    }
+
+    @Override
+    public boolean isReferenceType() {
+        return false;
     }
 }

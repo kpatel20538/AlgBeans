@@ -32,9 +32,4 @@ public class JavaParameter implements JavaVariable {
     public void setName(String name) {
         this.name = name;
     }
-
-    @Override
-    public String toString() {
-        return String.format("%s %s", getType(), getName());
-    }
 }

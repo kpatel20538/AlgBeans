@@ -12,8 +12,8 @@ public class JavaTypeDecl {
     private String typeName;
     private List<JavaTypeArgument> typeArguments;
 
-    public JavaTypeDecl(String typeName) {
-        this.typeName = typeName;
+    public JavaTypeDecl() {
+        this.typeName = "";
         this.typeArguments = new ArrayList<>();
     }
 

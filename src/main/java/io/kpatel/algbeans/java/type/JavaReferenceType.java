@@ -17,14 +17,6 @@ public class JavaReferenceType implements JavaType{
     public JavaReferenceType(Collection<? extends JavaTypeDecl> typeDecls) {
         this.typeDecls = new ArrayList<>(typeDecls);
     }
-    public JavaReferenceType(String simpleName) {
-        this.typeDecls = new ArrayList<>();
-        this.typeDecls.add(new JavaTypeDecl(simpleName));
-    }
-    public JavaReferenceType(String simpleName, Collection<? extends JavaTypeArgument> typeArguments) {
-        this.typeDecls = new ArrayList<>();
-        this.typeDecls.add(new JavaTypeDecl(simpleName, typeArguments));
-    }
 
     public List<JavaTypeDecl> getTypeDecls() {
         return Collections.unmodifiableList(typeDecls);
@@ -35,17 +27,12 @@ public class JavaReferenceType implements JavaType{
     }
 
     @Override
-    public boolean isReferenceType() {
-        return true;
-    }
-
-    @Override
-    public boolean isArray() {
-        return false;
-    }
-
-    @Override
     public String toString() {
         return new JavaUtil().toDelimitedList(getTypeDecls(), ".");
+    }
+
+    @Override
+    public boolean isReferenceType() {
+        return true;
     }
 }

@@ -14,7 +14,6 @@ public class JavaImport {
         this.isStatic = isStatic;
     }
 
-
     public boolean isStatic() {
         return isStatic;
     }

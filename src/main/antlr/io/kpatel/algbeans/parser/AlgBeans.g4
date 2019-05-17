@@ -8,14 +8,14 @@ fragment JAVA_LETTER        : '$' | '_' | ('A' .. 'Z') | ('a' .. 'z');
 fragment JAVA_LETTER_NUMBER : '0' .. '9' | JAVA_LETTER ;
 
 WS               : [\p{White_Space}] -> skip;
-PRIMITIVE        : 'float\b' | 'double\b' | 'byte\b' | 'short\b' | 'int\b' | 'long\b' | 'char\b' | 'boolean\b';
-PACKAGE          : 'package\b';
-IMPORT           : 'import\b';
-STATIC           : 'static\b';
-EXTENDS          : 'extends\b';
-SUPER            : 'super\b';
+PRIMITIVE        : 'float' | 'double' | 'byte' | 'short' | 'int' | 'long' | 'char' | 'boolean';
+PACKAGE          : 'package';
+IMPORT           : 'import';
+STATIC           : 'static';
+EXTENDS          : 'extends';
+SUPER            : 'super';
 GLOB             : '*';
-JAVA_IDENTIFIER  : JAVA_LETTER JAVA_LETTER_NUMBER* '\b';
+JAVA_IDENTIFIER  : JAVA_LETTER JAVA_LETTER_NUMBER*;
 
 document         : packageLine? importLine* unionLine* EOF;
 packageLine      : PACKAGE packageName ';';

@@ -11,8 +11,8 @@ public class JavaTypeParameter {
     private String typeName;
     private List<JavaReferenceType> bounds;
 
-    public JavaTypeParameter(String typeName) {
-        this.typeName = typeName;
+    public JavaTypeParameter() {
+        this.typeName = "";
         this.bounds = new ArrayList<>();
     }
 
@@ -20,7 +20,6 @@ public class JavaTypeParameter {
         this.typeName = typeName;
         this.bounds = new ArrayList<>(bounds);
     }
-
 
     public String getTypeName() {
         return typeName;
