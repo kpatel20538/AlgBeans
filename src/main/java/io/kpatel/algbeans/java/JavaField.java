@@ -1,20 +1,18 @@
-package io.kpatel.algbeans.java.element;
+package io.kpatel.algbeans.java;
 
 
 import io.kpatel.algbeans.java.type.JavaType;
 
-public class JavaParameter implements JavaVariable {
+/**
+ *  POJO representing a field, a pairing of type and name
+ */
+public class JavaField {
     private JavaType type;
     private String name;
 
-    public JavaParameter(JavaType type, String name) {
+    public JavaField(JavaType type, String name) {
         this.type = type;
         this.name = name;
-    }
-
-    public JavaParameter(JavaVariable javaVariable) {
-        this.type = javaVariable.getType();
-        this.name = javaVariable.getName();
     }
 
     public JavaType getType() {

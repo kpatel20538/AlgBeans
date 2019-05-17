@@ -1,11 +1,22 @@
 package io.kpatel.algbeans.java.type;
 
+/**
+ *  A Pseudo-POJO representing an Type argument, which a pairing of a bound and a reference type.
+ *
+ *  This object is valid only in two cases
+ *    - bound == UNBOUNDED
+ *    - type != null && bound != UNBOUNDED
+ *
+ *  This is because only the unbounded wildcard has no dependency on reference types.
+ *
+ */
 public class JavaTypeArgument {
-    public enum Bound { SPECIFIC, UNBOUNDED, EXTENDS, SUPER }
+    public enum Bound {SPECIFICALLY, UNBOUNDED, EXTENDS, SUPER }
 
     private Bound bound;
     private JavaReferenceType type;
 
+    /** Creates an Unbounded Wildcard */
     public JavaTypeArgument() {
         this.bound = Bound.UNBOUNDED;
         this.type = null;
@@ -35,7 +46,7 @@ public class JavaTypeArgument {
     @Override
     public String toString() {
         switch (getBound()) {
-            case SPECIFIC:
+            case SPECIFICALLY:
                 return getType().toString();
             case UNBOUNDED:
                 return "?";

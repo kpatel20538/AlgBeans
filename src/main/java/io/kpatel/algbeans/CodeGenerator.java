@@ -10,9 +10,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
+
+/**
+ *  Actor Object that takes in in-memory Union Types to produce Java Source files via template engine.
+ *
+ *  Output is put in the outputDirectory Path.
+ *
+ */
 
 public class CodeGenerator {
     private VelocityEngine velocityEngine;

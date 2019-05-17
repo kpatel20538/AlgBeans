@@ -15,16 +15,22 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  Actor Object that parses AlgBeans Files to produce in-memory Union Types via a generated parser.
+ *
+ *  Input is specified in the inputFiles Path.
+ *
+ */
 public class UnionCollector {
-    public List<UnionType> collect(Path inputPath) throws IOException {
+    public List<UnionType> collect(Path inputFile) throws IOException {
         ParseTreeWalker walker = new ParseTreeWalker();
         UnionCollectorListener listener = new UnionCollectorListener();
-        walker.walk(listener, getParseTree(inputPath));
+        walker.walk(listener, getParseTree(inputFile));
         return listener.getUnions();
     }
 
-    private ParseTree getParseTree(Path inputPath) throws IOException {
-        try (FileReader reader = new FileReader(inputPath.toFile())){
+    private ParseTree getParseTree(Path inputFile) throws IOException {
+        try (FileReader reader = new FileReader(inputFile.toFile())){
             CharStream charStream = CharStreams.fromReader(reader);
             AlgBeansLexer lexer = new AlgBeansLexer(charStream);
             CommonTokenStream tokens = new CommonTokenStream(lexer);
@@ -33,9 +39,9 @@ public class UnionCollector {
         }
     }
 
-    public List<UnionType> collect(List<? extends Path> inputPaths) throws IOException{
+    public List<UnionType> collect(List<? extends Path> inputFiles) throws IOException {
        List<UnionType> unionTypes = new ArrayList<>();
-       for (Path inputPath : inputPaths) {
+       for (Path inputPath : inputFiles) {
            unionTypes.addAll(collect(inputPath));
        }
        return unionTypes;

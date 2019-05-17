@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.List;
 
+/**
+ *  Actor Object that takes in IO paths to translate AlgBean Files to Java Source Files
+ *
+ */
 public class CodeTranslator {
     public void translate(List<Path> inputPaths, Path outputDirectory) throws IOException {
         UnionCollector unionCollector = new UnionCollector();

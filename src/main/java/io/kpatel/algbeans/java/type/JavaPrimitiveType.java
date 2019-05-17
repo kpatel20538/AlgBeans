@@ -1,5 +1,9 @@
 package io.kpatel.algbeans.java.type;
 
+/**
+ *  A Pseudo-POJOs representing each Primitive Type.
+ *
+ */
 public enum JavaPrimitiveType implements JavaType {
     FLOAT("float"),
     DOUBLE("double"),
@@ -24,8 +28,4 @@ public enum JavaPrimitiveType implements JavaType {
         return getTypeName();
     }
 
-    @Override
-    public boolean isReferenceType() {
-        return false;
-    }
 }

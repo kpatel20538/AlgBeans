@@ -7,6 +7,13 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ *  A Pseudo-POJOs representing each Reference Type.
+ *
+ *  Reference Type consists of a sequence of Type-Declarations
+ *  @see JavaTypeDecl
+ *
+ */
 public class JavaReferenceType implements JavaType{
     private List<JavaTypeDecl> typeDecls;
 
@@ -31,8 +38,4 @@ public class JavaReferenceType implements JavaType{
         return new JavaUtil().toDelimitedList(getTypeDecls(), ".");
     }
 
-    @Override
-    public boolean isReferenceType() {
-        return true;
-    }
 }

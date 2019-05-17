@@ -1,5 +1,10 @@
 package io.kpatel.algbeans.java.type;
 
+/**
+ *  A Pseudo-POJO representing an Array Type.
+ *  It wraps a pre-existing types
+ *
+ */
 public class JavaArrayType implements JavaType {
     private JavaType type;
 
@@ -15,15 +20,6 @@ public class JavaArrayType implements JavaType {
         this.type = type;
     }
 
-    @Override
-    public boolean isReferenceType() {
-        return getType().isReferenceType();
-    }
-
-    @Override
-    public boolean isArray() {
-        return true;
-    }
 
     @Override
     public String toString() {

@@ -2,11 +2,7 @@ package io.kpatel.algbeans.cli;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import com.beust.jcommander.converters.FileConverter;
-import io.kpatel.algbeans.CodeGenerator;
 import io.kpatel.algbeans.CodeTranslator;
-import io.kpatel.algbeans.UnionCollector;
-import io.kpatel.algbeans.entity.UnionType;
 
 import java.io.IOException;
 import java.nio.file.Path;
@@ -14,6 +10,11 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *  Parse and validates Arguments and defers to an Actor Object to convert AlgBean Files to Java Source Files.
+ *
+ * @see CodeTranslator
+ */
 public class CliMain {
 
     @Parameter(names = "--in", converter = PathConverter.class, variableArity = true)

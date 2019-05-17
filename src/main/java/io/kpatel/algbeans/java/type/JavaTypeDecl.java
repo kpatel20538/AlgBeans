@@ -7,7 +7,20 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
-
+/**
+ *  A Pseudo-POJO representing an Type Declaration which can been one of the following
+ *
+ *    - package (no typeArguments)
+ *    - a class (optional typeArguments)
+ *    - an interface (optional typeArguments)
+ *    - an inner class (optional typeArguments)
+ *    - an inner interface (optional typeArguments)
+ *
+ * @see JavaReferenceType
+ *
+ *  JavaTypeDecl.toString() is implemented for the benefit JavaReferenceType.toString() in JavaUtil.toDelimitedList
+ *
+ */
 public class JavaTypeDecl {
     private String typeName;
     private List<JavaTypeArgument> typeArguments;

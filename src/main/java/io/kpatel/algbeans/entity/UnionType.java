@@ -1,6 +1,6 @@
 package io.kpatel.algbeans.entity;
 
-import io.kpatel.algbeans.java.element.JavaImport;
+import io.kpatel.algbeans.java.JavaImport;
 import io.kpatel.algbeans.java.type.JavaTypeParameter;
 
 import java.util.ArrayList;
@@ -8,6 +8,10 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ *  POJO that represents a Sum type, which is abstract construct that can be one of a predefined Product Type from a closed list.
+ *
+ */
 public class UnionType {
     private String packageName;
     private List<JavaImport> imports;

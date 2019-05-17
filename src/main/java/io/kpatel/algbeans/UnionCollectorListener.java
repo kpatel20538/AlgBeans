@@ -2,8 +2,8 @@ package io.kpatel.algbeans;
 
 import io.kpatel.algbeans.entity.ProductType;
 import io.kpatel.algbeans.entity.UnionType;
-import io.kpatel.algbeans.java.element.JavaField;
-import io.kpatel.algbeans.java.element.JavaImport;
+import io.kpatel.algbeans.java.JavaField;
+import io.kpatel.algbeans.java.JavaImport;
 import io.kpatel.algbeans.java.type.*;
 import io.kpatel.algbeans.parser.AlgBeansBaseListener;
 import io.kpatel.algbeans.parser.AlgBeansParser;
@@ -12,13 +12,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ *  Traversal Object that traverses a Parse Tree and constructs a list of Union Types
+ *
+ *  This object follows the Listener Pattern when constructing AlgBean types.
+ *    and the Visitor Pattern when constructing Java Types, as the latter has
+ *    self-recurring structure (List&lt; List&lt; List&lt; ... &gt; &gt; &gt;),
+ *    while the former does not.
+ *
+ */
 public class UnionCollectorListener extends AlgBeansBaseListener {
     private String packageName;
     private List<JavaImport> imports;
     private List<UnionType> unions;
     private UnionType currentUnion;
     private JavaTypeParameter currentJtp;
-
     private ProductType currentProduct;
 
 
@@ -28,7 +36,6 @@ public class UnionCollectorListener extends AlgBeansBaseListener {
         unions = new ArrayList<>();
         currentUnion = null;
         currentJtp = null;
-
         currentProduct = null;
     }
 
@@ -149,7 +156,7 @@ public class UnionCollectorListener extends AlgBeansBaseListener {
         JavaTypeArgument typeArgument = new JavaTypeArgument();
         if (ctx.referenceType() != null) {
             typeArgument.setType(toReferenceType(ctx.referenceType()));
-            typeArgument.setBound(JavaTypeArgument.Bound.SPECIFIC);
+            typeArgument.setBound(JavaTypeArgument.Bound.SPECIFICALLY);
         } else if (ctx.wildcard().wildcardBounds() == null) {
             typeArgument.setBound(JavaTypeArgument.Bound.UNBOUNDED);
         } else {

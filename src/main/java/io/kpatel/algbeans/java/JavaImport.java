@@ -1,5 +1,8 @@
-package io.kpatel.algbeans.java.element;
+package io.kpatel.algbeans.java;
 
+/**
+ *  POJO representing a package import which may be static or not, or have an on-demand pattern or not
+ */
 public class JavaImport {
     private String pattern;
     private boolean isStatic;
