@@ -10,6 +10,9 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.List;
 
 public class CodeGenerator {
     private VelocityEngine velocityEngine;
@@ -29,7 +32,6 @@ public class CodeGenerator {
         context.put("util", new JavaUtil());
 
         this.outputDirectory = outputDirectory;
-        Files.createDirectories(outputDirectory);
     }
 
     public void generate(UnionType union) throws IOException {
@@ -39,8 +41,13 @@ public class CodeGenerator {
         }
     }
 
-    private Path toOutPath(UnionType union) {
+    private Path toOutPath(UnionType union) throws IOException {
+        Path outPath = outputDirectory;
+        for (String packageName : union.getPackageName().split("\\.")) {
+            outPath = outPath.resolve(packageName);
+        }
         String fileName = String.format("%s.java", union.getTypeName());
-        return outputDirectory.resolve(fileName);
+        Files.createDirectories(outPath);
+        return outPath.resolve(fileName);
     }
 }
