@@ -28,10 +28,10 @@ public class UnionType {
         this.productTypes = new ArrayList<>(productTypes);
     }
 
-    public UnionType(String typeName) {
+    public UnionType() {
         this.packageName = "";
         this.imports = new ArrayList<>();
-        this.typeName = typeName;
+        this.typeName = "";
         this.typeParameters = new ArrayList<>();
         this.productTypes = new ArrayList<>();
     }

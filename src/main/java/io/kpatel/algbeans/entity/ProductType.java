@@ -16,6 +16,11 @@ public class ProductType {
         this.fields = new ArrayList<>(fields);
     }
 
+    public ProductType() {
+        this.typeName = "";
+        this.fields = new ArrayList<>();
+    }
+
     public String getTypeName() {
         return typeName;
     }

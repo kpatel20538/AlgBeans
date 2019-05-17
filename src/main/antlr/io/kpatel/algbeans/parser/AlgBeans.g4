@@ -19,7 +19,7 @@ JAVA_IDENTIFIER  : JAVA_LETTER JAVA_LETTER_NUMBER* '\b';
 
 document         : packageLine? importLine* unionLine* EOF;
 packageLine      : PACKAGE packageName ';';
-importLine       : IMPORT STATIC? packageName ('.' GLOB)? ';';
+importLine       : IMPORT STATIC? packagePattern ';';
 unionLine        : unionType '=' productType ('|' productType)* ';';
 
 /*
@@ -38,6 +38,7 @@ fieldDeclaration : typeName JAVA_IDENTIFIER;
 
 
 packageName         : JAVA_IDENTIFIER ('.' JAVA_IDENTIFIER )*;
+packagePattern      : packageName '.*'?;
 
 typeParameters   : '<' typeParameter (',' typeParameter)* '>';
 typeParameter    : typeVariable typeBounds?;
