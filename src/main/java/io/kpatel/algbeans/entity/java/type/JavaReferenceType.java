@@ -1,11 +1,8 @@
-package io.kpatel.algbeans.java.type;
+package io.kpatel.algbeans.entity.java.type;
 
-import io.kpatel.algbeans.java.JavaUtil;
+import io.kpatel.algbeans.entity.java.JavaUtil;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  *  A Pseudo-POJOs representing each Reference Type.
@@ -22,7 +19,7 @@ public class JavaReferenceType implements JavaType{
     }
 
     public JavaReferenceType(Collection<? extends JavaTypeDecl> typeDecls) {
-        this.typeDecls = new ArrayList<>(typeDecls);
+        this.typeDecls = new ArrayList<>(Objects.requireNonNull(typeDecls));
     }
 
     public List<JavaTypeDecl> getTypeDecls() {
@@ -38,4 +35,16 @@ public class JavaReferenceType implements JavaType{
         return new JavaUtil().toDelimitedList(getTypeDecls(), ".");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JavaReferenceType that = (JavaReferenceType) o;
+        return getTypeDecls().equals(that.getTypeDecls());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getTypeDecls());
+    }
 }

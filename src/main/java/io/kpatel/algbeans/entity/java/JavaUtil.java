@@ -1,6 +1,6 @@
-package io.kpatel.algbeans.java;
+package io.kpatel.algbeans.entity.java;
 
-import io.kpatel.algbeans.java.type.*;
+import io.kpatel.algbeans.entity.java.type.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,15 +36,13 @@ public class JavaUtil {
     public String toTypeArgumentsCode(List<? extends JavaTypeParameter> typeParameters) {
         List<JavaTypeArgument> list = new ArrayList<>();
         for (JavaTypeParameter typeParameter : typeParameters) {
-            String typeName = typeParameter.getTypeName();
-            JavaTypeDecl typeDecl = new JavaTypeDecl();
-            typeDecl.setTypeName(typeName);
+            JavaIdentifier typeName = typeParameter.getTypeName();
+            JavaTypeDecl typeDecl = new JavaTypeDecl(typeName);
 
             JavaReferenceType referenceType = new JavaReferenceType();
             referenceType.addTypeDecls(typeDecl);
 
-            JavaTypeArgument typeArgument = new JavaTypeArgument();
-            typeArgument.setBound(JavaTypeArgument.Bound.SPECIFICALLY);
+            JavaTypeArgument typeArgument = new JavaTypeArgument(JavaTypeArgument.Bound.SPECIFICALLY);
             typeArgument.setType(referenceType);
 
             list.add(typeArgument);
@@ -57,17 +55,17 @@ public class JavaUtil {
         String template = field.getType() == JavaPrimitiveType.BOOLEAN
                 ? "is%s" : "get%s";
 
-        return String.format(template, capitalize(field.getName()));
+        return String.format(template, capitalize(field.getName().getId()));
     }
 
     /** For use in naming setter methods for fields in Product Types */
     public String toSetterName(JavaField field) {
-        return String.format("set%s", capitalize(field.getName()));
+        return String.format("set%s", capitalize(field.getName().getId()));
     }
 
     /** Common code between the naming of getter and setter methods in Product Types */
     public String capitalize(String word) {
-        if (word.length() == 0) return word;
+        if (word.isEmpty()) return word;
         return word.substring(0, 1).toUpperCase() + word.substring(1);
     }
 }

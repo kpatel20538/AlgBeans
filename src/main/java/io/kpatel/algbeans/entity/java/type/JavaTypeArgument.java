@@ -1,4 +1,6 @@
-package io.kpatel.algbeans.java.type;
+package io.kpatel.algbeans.entity.java.type;
+
+import java.util.Objects;
 
 /**
  *  A Pseudo-POJO representing an Type argument, which a pairing of a bound and a reference type.
@@ -17,13 +19,13 @@ public class JavaTypeArgument {
     private JavaReferenceType type;
 
     /** Creates an Unbounded Wildcard */
-    public JavaTypeArgument() {
-        this.bound = Bound.UNBOUNDED;
+    public JavaTypeArgument(Bound bound) {
+        this.bound = Objects.requireNonNull(bound);
         this.type = null;
     }
 
     public JavaTypeArgument(Bound bound, JavaReferenceType type) {
-        this.bound = bound;
+        this.bound = Objects.requireNonNull(bound);
         this.type = type;
     }
 
@@ -32,7 +34,7 @@ public class JavaTypeArgument {
     }
 
     public void setBound(Bound bound) {
-        this.bound = bound;
+        this.bound = Objects.requireNonNull(bound);
     }
 
     public JavaReferenceType getType() {
@@ -41,6 +43,10 @@ public class JavaTypeArgument {
 
     public void setType(JavaReferenceType type) {
         this.type = type;
+    }
+
+    public void removeType() {
+        this.type = null;
     }
 
     @Override
@@ -57,5 +63,19 @@ public class JavaTypeArgument {
             default:
                 throw new IllegalStateException("Unexpected value: " + getBound());
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        JavaTypeArgument that = (JavaTypeArgument) o;
+        return getBound() == that.getBound() &&
+                Objects.equals(getType(), that.getType());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getBound(), getType());
     }
 }

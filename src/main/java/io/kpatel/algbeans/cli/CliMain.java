@@ -2,6 +2,7 @@ package io.kpatel.algbeans.cli;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import io.kpatel.algbeans.CleaningPolicy;
 import io.kpatel.algbeans.CodeTranslator;
 
 import java.io.IOException;
@@ -17,13 +18,20 @@ import java.util.List;
  */
 public class CliMain {
 
-    @Parameter(names = "--in", converter = PathConverter.class, variableArity = true)
+    @Parameter(names = "--in", converter = PathConverter.class, variableArity = true, required = true)
     private List<Path> inputPaths = new ArrayList<>();
     @Parameter(names = "--out", converter = PathConverter.class)
     private Path outputDirectory = Paths.get(".");
 
     @Parameter(names = "--help", help = true)
     private boolean help;
+
+    @Parameter(
+            names = "--cleaning-policy",
+            converter = CleaningPolicyConverter.class,
+            validateWith = CleaningPolicyValidator.class
+    )
+    private CleaningPolicy cleaningPolicy = CleaningPolicy.NEVER_CWD;
 
 
     public static void main(String[] args) throws IOException {
@@ -41,6 +49,6 @@ public class CliMain {
             return;
         }
 
-        new CodeTranslator().translate(inputPaths, outputDirectory);
+        new CodeTranslator().translate(inputPaths, outputDirectory, cleaningPolicy);
     }
 }

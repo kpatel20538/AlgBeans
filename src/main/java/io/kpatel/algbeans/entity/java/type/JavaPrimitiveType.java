@@ -1,4 +1,6 @@
-package io.kpatel.algbeans.java.type;
+package io.kpatel.algbeans.entity.java.type;
+
+import io.kpatel.algbeans.entity.java.JavaIdentifier;
 
 /**
  *  A Pseudo-POJOs representing each Primitive Type.
@@ -14,18 +16,19 @@ public enum JavaPrimitiveType implements JavaType {
     CHAR("char"),
     BOOLEAN("boolean");
 
-    private String typeName;
+    private JavaIdentifier typeName;
     JavaPrimitiveType(String typeName) {
-        this.typeName = typeName;
+        this.typeName = new JavaIdentifier(typeName);
     }
 
-    public String getTypeName() {
+    public JavaIdentifier getTypeName() {
         return typeName;
     }
 
     @Override
     public String toString() {
-        return getTypeName();
+        return getTypeName().getId();
     }
+
 
 }

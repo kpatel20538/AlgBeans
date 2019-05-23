@@ -1,12 +1,10 @@
 package io.kpatel.algbeans.entity;
 
-import io.kpatel.algbeans.java.JavaImport;
-import io.kpatel.algbeans.java.type.JavaTypeParameter;
+import io.kpatel.algbeans.entity.java.JavaImport;
+import io.kpatel.algbeans.entity.java.JavaIdentifier;
+import io.kpatel.algbeans.entity.java.type.JavaTypeParameter;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  *  POJO that represents a Sum type, which is abstract construct that can be one of a predefined Product Type from a closed list.
@@ -15,37 +13,37 @@ import java.util.List;
 public class UnionType {
     private String packageName;
     private List<JavaImport> imports;
-    private String typeName;
+    private JavaIdentifier typeName;
     private List<JavaTypeParameter> typeParameters;
     private List<ProductType> productTypes;
 
-    public UnionType(
-            String packageName,
-            Collection<? extends JavaImport> imports,
-            String typeName,
-            Collection<? extends JavaTypeParameter> typeParameters,
-            Collection<? extends ProductType> productTypes) {
-        this.packageName = packageName;
-        this.imports = new ArrayList<>(imports);
-        this.typeName = typeName;
-        this.typeParameters = new ArrayList<>(typeParameters);
-        this.productTypes = new ArrayList<>(productTypes);
-    }
-
-    public UnionType() {
+    public UnionType(JavaIdentifier typeName) {
         this.packageName = "";
         this.imports = new ArrayList<>();
-        this.typeName = "";
+        this.typeName = Objects.requireNonNull(typeName);
         this.typeParameters = new ArrayList<>();
         this.productTypes = new ArrayList<>();
     }
 
-    public String getTypeName() {
+    public UnionType(
+            String packageName,
+            Collection<? extends JavaImport> imports,
+            JavaIdentifier typeName,
+            Collection<? extends JavaTypeParameter> typeParameters,
+            Collection<? extends ProductType> productTypes) {
+        this.packageName = Objects.requireNonNull(packageName);
+        this.imports = new ArrayList<>(Objects.requireNonNull(imports));
+        this.typeName = Objects.requireNonNull(typeName);
+        this.typeParameters = new ArrayList<>(Objects.requireNonNull(typeParameters));
+        this.productTypes = new ArrayList<>(Objects.requireNonNull(productTypes));
+    }
+
+    public JavaIdentifier getTypeName() {
         return typeName;
     }
 
-    public void setTypeName(String typeName) {
-        this.typeName = typeName;
+    public void setTypeName(JavaIdentifier typeName) {
+        this.typeName = Objects.requireNonNull(typeName);
     }
 
     public List<JavaTypeParameter> getTypeParameters() {
@@ -53,7 +51,7 @@ public class UnionType {
     }
 
     public void addTypeParameter(JavaTypeParameter typeParameter) {
-        typeParameters.add(typeParameter);
+        typeParameters.add(Objects.requireNonNull(typeParameter));
     }
 
     public String getPackageName() {
@@ -61,7 +59,7 @@ public class UnionType {
     }
 
     public void setPackageName(String packageName) {
-        this.packageName = packageName;
+        this.packageName = Objects.requireNonNull(packageName);
     }
 
     public List<JavaImport> getImports() {
@@ -69,7 +67,7 @@ public class UnionType {
     }
 
     public void addImport(JavaImport importLine) {
-        imports.add(importLine);
+        imports.add(Objects.requireNonNull(importLine));
     }
 
     public List<ProductType> getProductTypes() {
@@ -77,6 +75,23 @@ public class UnionType {
     }
 
     public void addProductType(ProductType productType) {
-        productTypes.add(productType);
+        productTypes.add(Objects.requireNonNull(productType));
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UnionType unionType = (UnionType) o;
+        return getPackageName().equals(unionType.getPackageName()) &&
+                getImports().equals(unionType.getImports()) &&
+                getTypeName().equals(unionType.getTypeName()) &&
+                getTypeParameters().equals(unionType.getTypeParameters()) &&
+                getProductTypes().equals(unionType.getProductTypes());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getPackageName(), getImports(), getTypeName(), getTypeParameters(), getProductTypes());
     }
 }

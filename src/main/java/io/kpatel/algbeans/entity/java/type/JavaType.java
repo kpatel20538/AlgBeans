@@ -1,4 +1,4 @@
-package io.kpatel.algbeans.java.type;
+package io.kpatel.algbeans.entity.java.type;
 
 /**
  *  The interface represents all type in Java
