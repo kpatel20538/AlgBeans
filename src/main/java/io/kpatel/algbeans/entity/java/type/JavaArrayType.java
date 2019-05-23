@@ -5,7 +5,6 @@ import java.util.Objects;
 /**
  *  A Pseudo-POJO representing an Array Type.
  *  It wraps a pre-existing types
- *
  */
 public class JavaArrayType implements JavaType {
     private JavaType type;
@@ -39,5 +38,15 @@ public class JavaArrayType implements JavaType {
     @Override
     public int hashCode() {
         return Objects.hash(getType());
+    }
+
+    @Override
+    public String getDefaultValue() {
+        return "null";
+    }
+
+    @Override
+    public Kind getKind() {
+        return Kind.ARRAY;
     }
 }

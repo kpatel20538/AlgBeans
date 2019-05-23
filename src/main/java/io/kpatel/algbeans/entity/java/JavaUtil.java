@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *  A Stateless Utility Class that aids the template engine and JavaType implementers
+ * A Stateless Utility Class that aids the template engine and JavaType implementers
  *
  * @see JavaType
  */
@@ -49,6 +49,29 @@ public class JavaUtil {
         }
         return toDelimitedList(list, ", ");
     }
+
+    /** Conversion helper: for use in template engine */
+    public List<? super JavaField> byKind(List<? extends JavaField> fields, int code) {
+        List<? super JavaField> filterFields = new ArrayList<>();
+        for (JavaField field : fields) {
+            if (field.getType().getKind().getCode() == code) {
+                filterFields.add(field);
+            }
+        }
+        return filterFields;
+    }
+
+    /** Conversion helper: for use in template engine */
+    public List<? super JavaField> byNotKind(List<? extends JavaField> fields, int code) {
+        List<? super JavaField> filterFields = new ArrayList<>();
+        for (JavaField field : fields) {
+            if (field.getType().getKind().getCode() != code) {
+                filterFields.add(field);
+            }
+        }
+        return filterFields;
+    }
+
 
     /** For use in naming getter methods for fields in Product Types */
     public String toGetterName(JavaField field) {

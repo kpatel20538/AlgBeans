@@ -26,7 +26,7 @@ public class PackageResolver {
 
     public Path resolvePackage(UnionType union) {
         Path outPath = outputDirectory;
-        for (String packageName : union.getPackageName().split("\\.")) {
+        for (String packageName : union.getPackageLine().getName().split("\\.")) {
             outPath = outPath.resolve(packageName);
         }
         return outPath;

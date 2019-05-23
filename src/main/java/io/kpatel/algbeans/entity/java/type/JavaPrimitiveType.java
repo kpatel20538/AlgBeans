@@ -4,21 +4,22 @@ import io.kpatel.algbeans.entity.java.JavaIdentifier;
 
 /**
  *  A Pseudo-POJOs representing each Primitive Type.
- *
  */
 public enum JavaPrimitiveType implements JavaType {
-    FLOAT("float"),
-    DOUBLE("double"),
-    BYTE("byte"),
-    SHORT("short"),
-    INT("int"),
-    LONG("long"),
-    CHAR("char"),
-    BOOLEAN("boolean");
+    FLOAT("float", "0.0f"),
+    DOUBLE("double", "0.0d"),
+    BYTE("byte", "0"),
+    SHORT("short", "0"),
+    INT("int", "0"),
+    LONG("long", "0L"),
+    CHAR("char", "'\\u0000'"),
+    BOOLEAN("boolean","false");
 
     private JavaIdentifier typeName;
-    JavaPrimitiveType(String typeName) {
+    private String defaultValue;
+    JavaPrimitiveType(String typeName, String defaultValue) {
         this.typeName = new JavaIdentifier(typeName);
+        this.defaultValue = defaultValue;
     }
 
     public JavaIdentifier getTypeName() {
@@ -30,5 +31,13 @@ public enum JavaPrimitiveType implements JavaType {
         return getTypeName().getId();
     }
 
+    @Override
+    public String getDefaultValue() {
+        return defaultValue;
+    }
 
+    @Override
+    public Kind getKind() {
+        return Kind.PRIMITIVE;
+    }
 }

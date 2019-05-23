@@ -3,7 +3,7 @@ package io.kpatel.algbeans;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-/*
+/**
  * Constants Holder and Utility Class for Cleaning Policies
  */
 public class CleaningPolicies {

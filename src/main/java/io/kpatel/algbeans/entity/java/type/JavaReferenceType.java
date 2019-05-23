@@ -9,7 +9,6 @@ import java.util.*;
  *
  *  Reference Type consists of a sequence of Type-Declarations
  *  @see JavaTypeDecl
- *
  */
 public class JavaReferenceType implements JavaType{
     private List<JavaTypeDecl> typeDecls;
@@ -46,5 +45,15 @@ public class JavaReferenceType implements JavaType{
     @Override
     public int hashCode() {
         return Objects.hash(getTypeDecls());
+    }
+
+    @Override
+    public String getDefaultValue() {
+        return "null";
+    }
+
+    @Override
+    public Kind getKind() {
+        return Kind.REFERENCE;
     }
 }

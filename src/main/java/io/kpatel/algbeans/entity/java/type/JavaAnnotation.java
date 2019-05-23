@@ -2,28 +2,28 @@ package io.kpatel.algbeans.entity.java.type;
 
 import java.util.Objects;
 
-/*
+/**
  * POJO representing a Java Annotation
  */
 public class JavaAnnotation {
-    private JavaReferenceType type;
+    private JavaType type;
     private String elements;
 
-    public JavaAnnotation(JavaReferenceType type) {
+    public JavaAnnotation(JavaType type) {
         this.type = Objects.requireNonNull(type);
         this.elements = "";
     }
 
-    public JavaAnnotation(JavaReferenceType type, String elements) {
+    public JavaAnnotation(JavaType type, String elements) {
         this.type = Objects.requireNonNull(type);
         this.elements = Objects.requireNonNull(elements);
     }
 
-    public JavaReferenceType getType() {
+    public JavaType getType() {
         return type;
     }
 
-    public void setType(JavaReferenceType type) {
+    public void setType(JavaType type) {
         this.type = Objects.requireNonNull(type);
     }
 

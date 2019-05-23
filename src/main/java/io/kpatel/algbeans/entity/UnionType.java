@@ -2,40 +2,53 @@ package io.kpatel.algbeans.entity;
 
 import io.kpatel.algbeans.entity.java.JavaImport;
 import io.kpatel.algbeans.entity.java.JavaIdentifier;
+import io.kpatel.algbeans.entity.java.JavaPackage;
+import io.kpatel.algbeans.entity.java.type.JavaAnnotation;
 import io.kpatel.algbeans.entity.java.type.JavaTypeParameter;
 
 import java.util.*;
 
 /**
  *  POJO that represents a Sum type, which is abstract construct that can be one of a predefined Product Type from a closed list.
- *
  */
 public class UnionType {
-    private String packageName;
-    private List<JavaImport> imports;
+    private JavaPackage packageLine;
+    private List<JavaImport> importLines;
+    private List<JavaAnnotation> annotations;
     private JavaIdentifier typeName;
     private List<JavaTypeParameter> typeParameters;
     private List<ProductType> productTypes;
 
     public UnionType(JavaIdentifier typeName) {
-        this.packageName = "";
-        this.imports = new ArrayList<>();
+        this.packageLine = new JavaPackage();
+        this.importLines = new ArrayList<>();
+        this.annotations = new ArrayList<>();
         this.typeName = Objects.requireNonNull(typeName);
         this.typeParameters = new ArrayList<>();
         this.productTypes = new ArrayList<>();
     }
 
     public UnionType(
-            String packageName,
-            Collection<? extends JavaImport> imports,
+            JavaPackage packageLine,
+            Collection<? extends JavaImport> importLines,
+            Collection<? extends JavaAnnotation> annotations,
             JavaIdentifier typeName,
             Collection<? extends JavaTypeParameter> typeParameters,
             Collection<? extends ProductType> productTypes) {
-        this.packageName = Objects.requireNonNull(packageName);
-        this.imports = new ArrayList<>(Objects.requireNonNull(imports));
+        this.packageLine = Objects.requireNonNull(packageLine);
+        this.importLines = new ArrayList<>(Objects.requireNonNull(importLines));
+        this.annotations = new ArrayList<>(Objects.requireNonNull(annotations));
         this.typeName = Objects.requireNonNull(typeName);
         this.typeParameters = new ArrayList<>(Objects.requireNonNull(typeParameters));
         this.productTypes = new ArrayList<>(Objects.requireNonNull(productTypes));
+    }
+
+    public List<JavaAnnotation> getAnnotations() {
+        return Collections.unmodifiableList(annotations);
+    }
+
+    public void addAnnotation(JavaAnnotation annotation) {
+        annotations.add(Objects.requireNonNull(annotation));
     }
 
     public JavaIdentifier getTypeName() {
@@ -54,20 +67,20 @@ public class UnionType {
         typeParameters.add(Objects.requireNonNull(typeParameter));
     }
 
-    public String getPackageName() {
-        return packageName;
+    public JavaPackage getPackageLine() {
+        return packageLine;
     }
 
-    public void setPackageName(String packageName) {
-        this.packageName = Objects.requireNonNull(packageName);
+    public void setPackageLine(JavaPackage packageLine) {
+        this.packageLine = Objects.requireNonNull(packageLine);
     }
 
-    public List<JavaImport> getImports() {
-        return Collections.unmodifiableList(imports);
+    public List<JavaImport> getImportLines() {
+        return Collections.unmodifiableList(importLines);
     }
 
     public void addImport(JavaImport importLine) {
-        imports.add(Objects.requireNonNull(importLine));
+        importLines.add(Objects.requireNonNull(importLine));
     }
 
     public List<ProductType> getProductTypes() {
@@ -83,8 +96,8 @@ public class UnionType {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         UnionType unionType = (UnionType) o;
-        return getPackageName().equals(unionType.getPackageName()) &&
-                getImports().equals(unionType.getImports()) &&
+        return getPackageLine().equals(unionType.getPackageLine()) &&
+                getImportLines().equals(unionType.getImportLines()) &&
                 getTypeName().equals(unionType.getTypeName()) &&
                 getTypeParameters().equals(unionType.getTypeParameters()) &&
                 getProductTypes().equals(unionType.getProductTypes());
@@ -92,6 +105,8 @@ public class UnionType {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getPackageName(), getImports(), getTypeName(), getTypeParameters(), getProductTypes());
+        return Objects.hash(getPackageLine(), getImportLines(), getTypeName(), getTypeParameters(), getProductTypes());
     }
+
+
 }

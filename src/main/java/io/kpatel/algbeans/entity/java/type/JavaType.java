@@ -13,5 +13,19 @@ package io.kpatel.algbeans.entity.java.type;
  *     employing it as a default conversion method.
  */
 public interface JavaType{
+    enum Kind {
+        PRIMITIVE(0), REFERENCE(1), ARRAY(2);
+        private int code;
 
+        Kind(int code) {
+            this.code = code;
+        }
+
+        public int getCode() {
+            return code;
+        }
+    }
+
+    String getDefaultValue();
+    Kind getKind();
 }

@@ -1,14 +1,20 @@
-#if( $union.packageName != "" )
-package $union.packageName;
+#if( $union.packageLine )
+package $union.packageLine.name;
 #end
 
-#foreach( $importLine in $union.imports )
+#foreach( $importLine in $union.importLines )
 import#if( $importLine.static ) static#end $importLine.pattern;
 #end
+import java.util.Objects;
+import java.util.Arrays;
+
 
 #set( $tp = $util.toTypeParameterCode($union.typeParameters) )
 #set( $ta = $util.toTypeArgumentsCode($union.typeParameters) )
 #set( $d = "$" )
+#foreach( $annotation in $union.annotations )
+@${annotation.type}#if( !$annotation.elements.empty )(${annotation.elements})#end
+#end
 public abstract class $union.typeName#if( !$tp.empty )<$tp>#end {
     #foreach( $product in $union.productTypes )
     public final static class $product.typeName#if( !$tp.empty )<$tp>#end extends $union.typeName#if( !$ta.empty )<$ta>#end {
@@ -16,9 +22,13 @@ public abstract class $union.typeName#if( !$tp.empty )<$tp>#end {
         private#if( $field.final ) final#end#if( $field.transient ) transient#end#if( $field.volatile ) volatile#end $field.type $field.name;
         #end
 
-        public ${product.typeName}() { }
-
         #if( !$product.fields.empty )
+        public ${product.typeName}() {
+            #foreach( $field in $product.fields )
+            this.$field.name =#if( $field.initializer ) $field.initializer#else $field.type.defaultValue#end;
+            #end
+        }
+
         public ${product.typeName}(${util.toParameterList($product.fields)}) {
             #foreach( $field in $product.fields )
             this.$field.name = $field.name;
@@ -40,6 +50,46 @@ public abstract class $union.typeName#if( !$tp.empty )<$tp>#end {
         #end
         public <${d}T> ${d}T when(Switch#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end cases) {
             return cases.is(this);
+        }
+
+        @Override
+        public String toString() {
+            #if( $product.fields.empty )
+            return return "${product.typeName}()";
+            #else
+            return "${product.typeName}(" +#foreach( $field in $product.fields )#if( $foreach.index > 0)", $field.name = " +#else"$field.name = " +#end#if( $field.type.kind.code != 2) ${util.toGetterName($field)}() +#else Arrays.toString(${util.toGetterName($field)}()) +#end#end')';
+            #end
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof $product.typeName)) return false;
+            $product.typeName that = ($product.typeName) obj;
+            #if( $product.fields.empty )
+            return true;
+            #else
+            return #foreach($field in $product.fields)#if($foreach.index != 0) &&#end#if($field.type.kind.code == 0) ${util.toGetterName($field)}() == that.${util.toGetterName($field)}()#elseif($field.type.kind.code == 1) Objects.equals(${util.toGetterName($field)}(), that.${util.toGetterName($field)}())#else Arrays.equals(${util.toGetterName($field)}(), that.${util.toGetterName($field)}())#end#end
+            #end
+        }
+
+        @Override
+        public int hashCode() {
+            #if( $product.fields.empty )
+            return 0;
+            #elseif ( $util.byKind($product.fields, 2).empty )
+            return Objects.hash(#foreach( $field in $product.fields )#if( $foreach.index > 0), ${util.toGetterName($field).trim()}()#else${util.toGetterName($field)}()#end#end);
+            #else
+            #if ( $util.byNotKind($product.fields, 2).empty )
+            int code = 0;
+            #else
+            int code = Objects.hash(#foreach( $field in $util.byNotKind($product.fields, 2) )#if( $foreach.index > 0), #end ${util.toGetterName($field).trim()}()#end );
+            #end
+            #foreach( $field in $util.byKind($product.fields, 2) )
+            code = 37 * code + Arrays.hashCode(${util.toGetterName($field)}());
+            #end
+            return code;
+            #end
         }
 
     }

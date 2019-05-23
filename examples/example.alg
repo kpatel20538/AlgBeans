@@ -3,6 +3,8 @@ package com.example;
 /* Data Structures Example */
 
 //  node -> node -> node -> empty
+@Deprecated
+@SuppressWarnings("unchecked")
 LinkedList<T> = UNode(final T item, volatile synchronized LinkedList<T> next) | EmptyUNode();
 
 //  node(node(node(empty,empty),empty),empty)

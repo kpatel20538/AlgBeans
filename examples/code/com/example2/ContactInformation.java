@@ -2,6 +2,9 @@ package com.example2;
 
 import java.time.LocalDate;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.Arrays;
+
 
 public abstract class ContactInformation {
     public final static class Mail extends ContactInformation {
@@ -11,7 +14,13 @@ public abstract class ContactInformation {
         private String country;
         private String postalCode;
 
-        public Mail() { }
+        public Mail() {
+            this.address = null;
+            this.region = null;
+            this.city = null;
+            this.country = null;
+            this.postalCode = "34344";
+        }
 
         public Mail(String address, String region, String city, String country, String postalCode) {
             this.address = address;
@@ -65,12 +74,32 @@ public abstract class ContactInformation {
             return cases.is(this);
         }
 
+        @Override
+        public String toString() {
+            return "Mail(" +"address = " + getAddress() +", region = " + getRegion() +", city = " + getCity() +", country = " + getCountry() +", postalCode = " + getPostalCode() +')';
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof Mail)) return false;
+            Mail that = (Mail) obj;
+            return  Objects.equals(getAddress(), that.getAddress()) && Objects.equals(getRegion(), that.getRegion()) && Objects.equals(getCity(), that.getCity()) && Objects.equals(getCountry(), that.getCountry()) && Objects.equals(getPostalCode(), that.getPostalCode())
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getAddress(), getRegion(), getCity(), getCountry(), getPostalCode());
+        }
+
     }
 
     public final static class Email extends ContactInformation {
         private String addr;
 
-        public Email() { }
+        public Email() {
+            this.addr = null;
+        }
 
         public Email(String addr) {
             this.addr = addr;
@@ -88,12 +117,32 @@ public abstract class ContactInformation {
             return cases.is(this);
         }
 
+        @Override
+        public String toString() {
+            return "Email(" +"addr = " + getAddr() +')';
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof Email)) return false;
+            Email that = (Email) obj;
+            return  Objects.equals(getAddr(), that.getAddr())
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getAddr());
+        }
+
     }
 
     public final static class Phone extends ContactInformation {
         private int[] number;
 
-        public Phone() { }
+        public Phone() {
+            this.number = {1,2,3,4};
+        }
 
         public Phone(int[] number) {
             this.number = number;
@@ -111,12 +160,34 @@ public abstract class ContactInformation {
             return cases.is(this);
         }
 
+        @Override
+        public String toString() {
+            return "Phone(" +"number = " + Arrays.toString(getNumber()) +')';
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof Phone)) return false;
+            Phone that = (Phone) obj;
+            return  Arrays.equals(getNumber(), that.getNumber())
+        }
+
+        @Override
+        public int hashCode() {
+            int code = 0;
+            code = 37 * code + Arrays.hashCode(getNumber());
+            return code;
+        }
+
     }
 
     public final static class Fax extends ContactInformation {
         private boolean isCallable;
 
-        public Fax() { }
+        public Fax() {
+            this.isCallable = false&&(Boolean)true||false&&(34.0>60.0);
+        }
 
         public Fax(boolean isCallable) {
             this.isCallable = isCallable;
@@ -132,6 +203,24 @@ public abstract class ContactInformation {
 
         public <$T> $T when(Switch<$T> cases) {
             return cases.is(this);
+        }
+
+        @Override
+        public String toString() {
+            return "Fax(" +"isCallable = " + isIsCallable() +')';
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof Fax)) return false;
+            Fax that = (Fax) obj;
+            return  isIsCallable() == that.isIsCallable()
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(isIsCallable());
         }
 
     }

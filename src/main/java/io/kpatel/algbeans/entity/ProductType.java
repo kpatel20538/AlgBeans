@@ -7,7 +7,6 @@ import java.util.*;
 
 /**
  *  POJO that represents a Product type, which is Pseudo-POJO that represent one possible case of a parent Union type.
- *
  */
 public class ProductType {
     private JavaIdentifier typeName;

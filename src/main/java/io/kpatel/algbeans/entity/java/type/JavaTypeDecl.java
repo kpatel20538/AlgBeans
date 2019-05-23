@@ -17,7 +17,6 @@ import java.util.*;
  * @see JavaReferenceType
  *
  *  JavaTypeDecl.toString() is implemented for the benefit JavaReferenceType.toString() in JavaUtil.toDelimitedList
- *
  */
 public class JavaTypeDecl {
     private JavaIdentifier typeName;

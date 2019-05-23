@@ -5,6 +5,7 @@ import io.kpatel.algbeans.entity.UnionType;
 import io.kpatel.algbeans.entity.java.JavaField;
 import io.kpatel.algbeans.entity.java.JavaIdentifier;
 import io.kpatel.algbeans.entity.java.JavaImport;
+import io.kpatel.algbeans.entity.java.JavaPackage;
 import io.kpatel.algbeans.entity.java.type.*;
 import io.kpatel.algbeans.parser.AlgBeansBaseListener;
 import io.kpatel.algbeans.parser.AlgBeansParser;
@@ -22,8 +23,8 @@ import java.util.List;
  * @see TypeVisitor
  */
 public class UnionListener extends AlgBeansBaseListener {
-    private String packageName;
-    private List<JavaImport> imports;
+    private JavaPackage packageLine;
+    private List<JavaImport> importLines;
     private List<UnionType> unions;
     private UnionType currentUnion;
     private JavaTypeParameter currentJtp;
@@ -31,8 +32,8 @@ public class UnionListener extends AlgBeansBaseListener {
 
 
     public UnionListener() {
-        packageName = "";
-        imports = new ArrayList<>();
+        packageLine = new JavaPackage();
+        importLines = new ArrayList<>();
         unions = new ArrayList<>();
         currentUnion = null;
         currentJtp = null;
@@ -43,17 +44,17 @@ public class UnionListener extends AlgBeansBaseListener {
         return Collections.unmodifiableList(unions);
     }
 
-    public String getPackageName() {
-        return packageName;
+    public JavaPackage getPackageLine() {
+        return packageLine;
     }
 
-    public List<JavaImport> getImports() {
-        return Collections.unmodifiableList(imports);
+    public List<JavaImport> getImportLines() {
+        return Collections.unmodifiableList(importLines);
     }
 
     @Override
     public void enterPackageLine(AlgBeansParser.PackageLineContext ctx) {
-        packageName = ctx.packageName().getText().trim();
+        packageLine = new JavaPackage(ctx.packageName().getText().trim());
     }
 
     @Override
@@ -61,7 +62,7 @@ public class UnionListener extends AlgBeansBaseListener {
         String importPattern = ctx.packagePattern().getText().trim();
         JavaImport importLine = new JavaImport(importPattern);
         importLine.setStatic(ctx.STATIC() != null);
-        imports.add(importLine);
+        importLines.add(importLine);
     }
 
     @Override
@@ -74,9 +75,14 @@ public class UnionListener extends AlgBeansBaseListener {
     public void enterUnionType(AlgBeansParser.UnionTypeContext ctx) {
         JavaIdentifier typeName = IdentifierVisitor.visit(ctx.identifier());
         currentUnion = new UnionType(typeName);
-        currentUnion.setPackageName(packageName);
-        for (JavaImport importLine : imports) {
+        currentUnion.setPackageLine(packageLine);
+        for (JavaImport importLine : importLines) {
             currentUnion.addImport(importLine);
+        }
+        if (ctx.annotation() != null) {
+            for (AlgBeansParser.AnnotationContext annotationCtx : ctx.annotation()) {
+                currentUnion.addAnnotation(AnnotationVisitor.visit(annotationCtx));
+            }
         }
     }
 
@@ -125,6 +131,9 @@ public class UnionListener extends AlgBeansBaseListener {
                 case "volatile": field.enableVolatile(); break;
                 case "synchronized": field.enableSynchronized(); break;
             }
+        }
+        if (ctx.fieldInit() != null) {
+            field.setInitializer(ctx.fieldInit().getText().trim());
         }
         currentProduct.addField(field);
     }

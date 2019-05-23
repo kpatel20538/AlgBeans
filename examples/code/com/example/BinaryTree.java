@@ -1,5 +1,8 @@
 package com.example;
 
+import java.util.Objects;
+import java.util.Arrays;
+
 
 public abstract class BinaryTree<T> {
     public final static class BNode<T> extends BinaryTree<T> {
@@ -7,7 +10,11 @@ public abstract class BinaryTree<T> {
         private volatile BinaryTree<T> left;
         private volatile BinaryTree<T> right;
 
-        public BNode() { }
+        public BNode() {
+            this.item = null;
+            this.left = null;
+            this.right = null;
+        }
 
         public BNode(T item, BinaryTree<T> left, BinaryTree<T> right) {
             this.item = item;
@@ -39,14 +46,48 @@ public abstract class BinaryTree<T> {
             return cases.is(this);
         }
 
+        @Override
+        public String toString() {
+            return "BNode(" +"item = " + getItem() +", left = " + getLeft() +", right = " + getRight() +')';
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof BNode)) return false;
+            BNode that = (BNode) obj;
+            return  Objects.equals(getItem(), that.getItem()) && Objects.equals(getLeft(), that.getLeft()) && Objects.equals(getRight(), that.getRight())
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getItem(), getLeft(), getRight());
+        }
+
     }
 
     public final static class EmptyBNode<T> extends BinaryTree<T> {
 
-        public EmptyBNode() { }
-
         public <$T> $T when(Switch<$T, T> cases) {
             return cases.is(this);
+        }
+
+        @Override
+        public String toString() {
+            return return "EmptyBNode()";
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof EmptyBNode)) return false;
+            EmptyBNode that = (EmptyBNode) obj;
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            return 0;
         }
 
     }

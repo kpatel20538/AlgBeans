@@ -10,7 +10,6 @@ import java.util.Objects;
  *    - type != null && bound != UNBOUNDED
  *
  *  This is because only the unbounded wildcard has no dependency on reference types.
- *
  */
 public class JavaTypeArgument {
     public enum Bound {SPECIFICALLY, UNBOUNDED, EXTENDS, SUPER }

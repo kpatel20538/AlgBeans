@@ -12,15 +12,23 @@ public class JavaField {
     private JavaType type;
     private JavaIdentifier name;
     private int modifiers;
+    private String initializer;
 
     private static int FINAL = 1;
     private static int TRANSIENT = 2;
     private static int VOLATILE = 4;
     private static int SYNCHRONIZED = 8;
 
+    public JavaField(JavaType type, JavaIdentifier name, String initializer) {
+        this.type = Objects.requireNonNull(type);
+        this.name = Objects.requireNonNull(name);
+        this.initializer = initializer;
+        this.modifiers = 0;
+    }
     public JavaField(JavaType type, JavaIdentifier name) {
         this.type = Objects.requireNonNull(type);
         this.name = Objects.requireNonNull(name);
+        this.initializer = "";
         this.modifiers = 0;
     }
 
@@ -107,6 +115,13 @@ public class JavaField {
         if (isSynchronized) { enableSynchronized(); } else { disableSynchronized(); }
     }
 
+    public String getInitializer() {
+        return initializer;
+    }
+
+    public void setInitializer(String initializer) {
+        this.initializer = initializer;
+    }
 
     @Override
     public String toString() {
@@ -120,11 +135,12 @@ public class JavaField {
         JavaField javaField = (JavaField) o;
         return modifiers == javaField.modifiers &&
                 getType().equals(javaField.getType()) &&
-                getName().equals(javaField.getName());
+                getName().equals(javaField.getName()) &&
+                getInitializer().equals(javaField.getInitializer());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getType(), getName(), modifiers);
+        return Objects.hash(getType(), getName(), modifiers, getInitializer());
     }
 }

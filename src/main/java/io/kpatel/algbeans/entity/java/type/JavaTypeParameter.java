@@ -9,7 +9,6 @@ import java.util.*;
  *  A Pseudo-POJO representing an Type Parameter, which a pairing of a list of bounds and parameter name.
  *
  *  Bounds list may be empty, in that case, the parameter is unbounded.
- *
  */
 public class JavaTypeParameter {
     private JavaIdentifier typeName;

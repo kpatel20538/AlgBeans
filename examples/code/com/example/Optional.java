@@ -1,11 +1,16 @@
 package com.example;
 
+import java.util.Objects;
+import java.util.Arrays;
+
 
 public abstract class Optional<T> {
     public final static class Exists<T> extends Optional<T> {
         private T item;
 
-        public Exists() { }
+        public Exists() {
+            this.item = null;
+        }
 
         public Exists(T item) {
             this.item = item;
@@ -23,14 +28,48 @@ public abstract class Optional<T> {
             return cases.is(this);
         }
 
+        @Override
+        public String toString() {
+            return "Exists(" +"item = " + getItem() +')';
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof Exists)) return false;
+            Exists that = (Exists) obj;
+            return  Objects.equals(getItem(), that.getItem())
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(getItem());
+        }
+
     }
 
     public final static class NoExists<T> extends Optional<T> {
 
-        public NoExists() { }
-
         public <$T> $T when(Switch<$T, T> cases) {
             return cases.is(this);
+        }
+
+        @Override
+        public String toString() {
+            return return "NoExists()";
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj) return true;
+            if (!(obj instanceof NoExists)) return false;
+            NoExists that = (NoExists) obj;
+            return true;
+        }
+
+        @Override
+        public int hashCode() {
+            return 0;
         }
 
     }
