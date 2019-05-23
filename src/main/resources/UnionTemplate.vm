@@ -13,7 +13,7 @@ public abstract class $union.typeName#if( !$tp.empty )<$tp>#end {
     #foreach( $product in $union.productTypes )
     public final static class $product.typeName#if( !$tp.empty )<$tp>#end extends $union.typeName#if( !$ta.empty )<$ta>#end {
         #foreach( $field in $product.fields )
-        private $field.type $field.name;
+        private#if( $field.final ) final#end#if( $field.transient ) transient#end#if( $field.volatile ) volatile#end $field.type $field.name;
         #end
 
         public ${product.typeName}() { }
@@ -27,14 +27,16 @@ public abstract class $union.typeName#if( !$tp.empty )<$tp>#end {
 
         #end
         #foreach( $field in $product.fields )
-        public $field.type ${util.toGetterName($field)}() {
+        public#if( $field.synchronized ) synchronized#end $field.type ${util.toGetterName($field)}() {
             return $field.name;
         }
 
-        public void ${util.toSetterName($field)}($field.type $field.name) {
+        #if( !$field.final )
+        public#if( $field.synchronized ) synchronized#end void ${util.toSetterName($field)}($field.type $field.name) {
             this.$field.name = $field.name;
         }
 
+        #end
         #end
         public <${d}T> ${d}T when(Switch#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end cases) {
             return cases.is(this);

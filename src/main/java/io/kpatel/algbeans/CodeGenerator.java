@@ -10,9 +10,7 @@ import java.io.Writer;
 
 /**
  *  Actor Object that takes in in-memory Union Types to produce Java Source files via template engine.
- *
  */
-
 public class CodeGenerator {
     private VelocityEngine velocityEngine;
     private Template templateUnion;

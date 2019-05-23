@@ -15,17 +15,21 @@ import java.util.List;
  */
 public class CodeTranslator {
     public void translate(List<Path> inputPaths, Path outputDirectory, CleaningPolicy policy) throws IOException {
-        PackageResolver packageResolver = new PackageResolver(outputDirectory, policy);
+        PackageResolver packageResolver = new PackageResolver(outputDirectory);
 
         List<UnionType> unions = collectPhase(inputPaths);
+        cleanPhase(packageResolver, unions, policy);
         generatePhase(packageResolver, unions);
     }
 
-    private void generatePhase(PackageResolver packageResolver, List<UnionType> unions) throws IOException {
+    private void cleanPhase(PackageResolver packageResolver, List<UnionType> unions, CleaningPolicy policy) throws IOException {
         for (UnionType union: unions) {
-            packageResolver.cleanPackage(union);
+            Path path = packageResolver.resolvePackage(union);
+            policy.cleanContents(path);
         }
+    }
 
+    private void generatePhase(PackageResolver packageResolver, List<UnionType> unions) throws IOException {
         CodeGenerator codeGenerator = new CodeGenerator();
         for (UnionType union: unions) {
             try (Writer writer = packageResolver.makeSourceWriter(union)) {

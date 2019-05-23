@@ -3,8 +3,8 @@ package com.example;
 
 public abstract class LinkedList<T> {
     public final static class UNode<T> extends LinkedList<T> {
-        private T item;
-        private LinkedList<T> next;
+        private final T item;
+        private volatile LinkedList<T> next;
 
         public UNode() { }
 
@@ -17,15 +17,11 @@ public abstract class LinkedList<T> {
             return item;
         }
 
-        public void setItem(T item) {
-            this.item = item;
-        }
-
-        public LinkedList<T> getNext() {
+        public synchronized LinkedList<T> getNext() {
             return next;
         }
 
-        public void setNext(LinkedList<T> next) {
+        public synchronized void setNext(LinkedList<T> next) {
             this.next = next;
         }
 

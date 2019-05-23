@@ -8,6 +8,7 @@ import io.kpatel.algbeans.entity.java.JavaImport;
 import io.kpatel.algbeans.entity.java.type.*;
 import io.kpatel.algbeans.parser.AlgBeansBaseListener;
 import io.kpatel.algbeans.parser.AlgBeansParser;
+import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -117,6 +118,14 @@ public class UnionListener extends AlgBeansBaseListener {
         JavaType type = typeVisitor.visit(ctx.typeName());
         JavaIdentifier name = IdentifierVisitor.visit(ctx.identifier());
         JavaField field = new JavaField(type, name);
+        for (TerminalNode node: ctx.MODIFIER()) {
+            switch (node.getText().trim()) {
+                case "final": field.enableFinal(); break;
+                case "transient": field.enableTransient(); break;
+                case "volatile": field.enableVolatile(); break;
+                case "synchronized": field.enableSynchronized(); break;
+            }
+        }
         currentProduct.addField(field);
     }
 

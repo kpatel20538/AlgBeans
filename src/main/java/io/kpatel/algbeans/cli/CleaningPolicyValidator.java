@@ -8,6 +8,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ *  JCommander helper: Validates Cleaning Policies from commandline.
+ */
 public class CleaningPolicyValidator implements IParameterValidator {
     private static Set<String> validPolicies = Collections.unmodifiableSet(
             new HashSet<>(Arrays.asList("always", "never", "never-cwd"))

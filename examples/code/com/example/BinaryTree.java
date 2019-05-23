@@ -3,9 +3,9 @@ package com.example;
 
 public abstract class BinaryTree<T> {
     public final static class BNode<T> extends BinaryTree<T> {
-        private T item;
-        private BinaryTree<T> left;
-        private BinaryTree<T> right;
+        private final transient T item;
+        private volatile BinaryTree<T> left;
+        private volatile BinaryTree<T> right;
 
         public BNode() { }
 
@@ -17,10 +17,6 @@ public abstract class BinaryTree<T> {
 
         public T getItem() {
             return item;
-        }
-
-        public void setItem(T item) {
-            this.item = item;
         }
 
         public BinaryTree<T> getLeft() {

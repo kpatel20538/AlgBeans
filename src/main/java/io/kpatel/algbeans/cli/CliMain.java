@@ -2,6 +2,7 @@ package io.kpatel.algbeans.cli;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
+import io.kpatel.algbeans.CleaningPolicies;
 import io.kpatel.algbeans.CleaningPolicy;
 import io.kpatel.algbeans.CodeTranslator;
 
@@ -31,7 +32,7 @@ public class CliMain {
             converter = CleaningPolicyConverter.class,
             validateWith = CleaningPolicyValidator.class
     )
-    private CleaningPolicy cleaningPolicy = CleaningPolicy.NEVER_CWD;
+    private CleaningPolicy cleaningPolicy = CleaningPolicies.NEVER_CWD;
 
 
     public static void main(String[] args) throws IOException {
@@ -44,11 +45,6 @@ public class CliMain {
     }
 
     public void run() throws IOException {
-        if (inputPaths.isEmpty()) {
-            System.err.println("Specify Input Paths with the '--in FILE ...' parameter");
-            return;
-        }
-
         new CodeTranslator().translate(inputPaths, outputDirectory, cleaningPolicy);
     }
 }

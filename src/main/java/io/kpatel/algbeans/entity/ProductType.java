@@ -23,8 +23,6 @@ public class ProductType {
         this.fields = new ArrayList<>(Objects.requireNonNull(fields));
     }
 
-
-
     public JavaIdentifier getTypeName() {
         return typeName;
     }
