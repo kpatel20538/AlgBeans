@@ -1,8 +1,8 @@
 package io.kpatel.algbeans.entity.java;
 
-import io.kpatel.algbeans.entity.java.type.JavaAnnotation;
-
-import java.util.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Objects;
 
 /**
  *  POJO for java packages
@@ -24,6 +24,18 @@ public class JavaPackage {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Path toPath() {
+        Path outPath = Paths.get("");
+        for (String packageName : getName().split("\\.")) {
+            outPath = outPath.resolve(packageName);
+        }
+        return outPath;
+    }
+
+    public boolean isDefault() {
+        return getName().isEmpty();
     }
 
     @Override

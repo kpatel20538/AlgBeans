@@ -30,15 +30,15 @@ public abstract class Optional<T> {
 
         @Override
         public String toString() {
-            return "Exists(" +"item = " + getItem() +')';
+            return "Exists(" + "item = " +  getItem() + ")";
         }
 
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
-            if (!(obj instanceof Exists)) return false;
+            if (obj == null || getClass() != obj.getClass()) return false;
             Exists that = (Exists) obj;
-            return  Objects.equals(getItem(), that.getItem())
+            return  Objects.equals(getItem(), that.getItem());
         }
 
         @Override
@@ -56,15 +56,12 @@ public abstract class Optional<T> {
 
         @Override
         public String toString() {
-            return return "NoExists()";
+            return "NoExists()";
         }
 
         @Override
         public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof NoExists)) return false;
-            NoExists that = (NoExists) obj;
-            return true;
+            return obj != null && getClass() == obj.getClass();
         }
 
         @Override
@@ -74,7 +71,7 @@ public abstract class Optional<T> {
 
     }
 
-    interface Switch<$T, T> {
+    public interface Switch<$T, T> {
         $T is(Exists<T> it);
         $T is(NoExists<T> it);
     }

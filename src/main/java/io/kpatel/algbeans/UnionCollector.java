@@ -17,7 +17,6 @@ import java.util.List;
  *  Actor Object that parses AlgBeans Readers, to produce in-memory Union Types via a generated parser.
  */
 public class UnionCollector {
-
     public List<UnionType> collect(Reader reader) throws IOException {
         ParseTreeWalker walker = new ParseTreeWalker();
         UnionListener listener = new UnionListener();

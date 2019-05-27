@@ -76,15 +76,15 @@ public abstract class ContactInformation {
 
         @Override
         public String toString() {
-            return "Mail(" +"address = " + getAddress() +", region = " + getRegion() +", city = " + getCity() +", country = " + getCountry() +", postalCode = " + getPostalCode() +')';
+            return "Mail(" + "address = " +  getAddress() + ", region = " +  getRegion() + ", city = " +  getCity() + ", country = " +  getCountry() + ", postalCode = " +  getPostalCode() + ")";
         }
 
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
-            if (!(obj instanceof Mail)) return false;
+            if (obj == null || getClass() != obj.getClass()) return false;
             Mail that = (Mail) obj;
-            return  Objects.equals(getAddress(), that.getAddress()) && Objects.equals(getRegion(), that.getRegion()) && Objects.equals(getCity(), that.getCity()) && Objects.equals(getCountry(), that.getCountry()) && Objects.equals(getPostalCode(), that.getPostalCode())
+            return  Objects.equals(getAddress(), that.getAddress()) && Objects.equals(getRegion(), that.getRegion()) && Objects.equals(getCity(), that.getCity()) && Objects.equals(getCountry(), that.getCountry()) && Objects.equals(getPostalCode(), that.getPostalCode());
         }
 
         @Override
@@ -119,15 +119,15 @@ public abstract class ContactInformation {
 
         @Override
         public String toString() {
-            return "Email(" +"addr = " + getAddr() +')';
+            return "Email(" + "addr = " +  getAddr() + ")";
         }
 
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
-            if (!(obj instanceof Email)) return false;
+            if (obj == null || getClass() != obj.getClass()) return false;
             Email that = (Email) obj;
-            return  Objects.equals(getAddr(), that.getAddr())
+            return  Objects.equals(getAddr(), that.getAddr());
         }
 
         @Override
@@ -162,15 +162,15 @@ public abstract class ContactInformation {
 
         @Override
         public String toString() {
-            return "Phone(" +"number = " + Arrays.toString(getNumber()) +')';
+            return "Phone(" + "number = " +  Arrays.toString(getNumber()) + ")";
         }
 
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
-            if (!(obj instanceof Phone)) return false;
+            if (obj == null || getClass() != obj.getClass()) return false;
             Phone that = (Phone) obj;
-            return  Arrays.equals(getNumber(), that.getNumber())
+            return  Arrays.equals(getNumber(), that.getNumber());
         }
 
         @Override
@@ -207,15 +207,15 @@ public abstract class ContactInformation {
 
         @Override
         public String toString() {
-            return "Fax(" +"isCallable = " + isIsCallable() +')';
+            return "Fax(" + "isCallable = " +  isIsCallable() + ")";
         }
 
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
-            if (!(obj instanceof Fax)) return false;
+            if (obj == null || getClass() != obj.getClass()) return false;
             Fax that = (Fax) obj;
-            return  isIsCallable() == that.isIsCallable()
+            return  isIsCallable() == that.isIsCallable();
         }
 
         @Override
@@ -225,7 +225,7 @@ public abstract class ContactInformation {
 
     }
 
-    interface Switch<$T> {
+    public interface Switch<$T> {
         $T is(Mail it);
         $T is(Email it);
         $T is(Phone it);

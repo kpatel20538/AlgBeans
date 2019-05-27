@@ -39,15 +39,15 @@ public abstract class LinkedList<T> {
 
         @Override
         public String toString() {
-            return "UNode(" +"item = " + getItem() +", next = " + getNext() +')';
+            return "UNode(" + "item = " +  getItem() + ", next = " +  getNext() + ")";
         }
 
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
-            if (!(obj instanceof UNode)) return false;
+            if (obj == null || getClass() != obj.getClass()) return false;
             UNode that = (UNode) obj;
-            return  Objects.equals(getItem(), that.getItem()) && Objects.equals(getNext(), that.getNext())
+            return  Objects.equals(getItem(), that.getItem()) && Objects.equals(getNext(), that.getNext());
         }
 
         @Override
@@ -65,15 +65,12 @@ public abstract class LinkedList<T> {
 
         @Override
         public String toString() {
-            return return "EmptyUNode()";
+            return "EmptyUNode()";
         }
 
         @Override
         public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof EmptyUNode)) return false;
-            EmptyUNode that = (EmptyUNode) obj;
-            return true;
+            return obj != null && getClass() == obj.getClass();
         }
 
         @Override
@@ -83,7 +80,7 @@ public abstract class LinkedList<T> {
 
     }
 
-    interface Switch<$T, T> {
+    public interface Switch<$T, T> {
         $T is(UNode<T> it);
         $T is(EmptyUNode<T> it);
     }

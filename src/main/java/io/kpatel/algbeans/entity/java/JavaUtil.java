@@ -1,5 +1,7 @@
 package io.kpatel.algbeans.entity.java;
 
+import io.kpatel.algbeans.entity.java.JavaField;
+import io.kpatel.algbeans.entity.java.JavaIdentifier;
 import io.kpatel.algbeans.entity.java.type.*;
 
 import java.util.ArrayList;

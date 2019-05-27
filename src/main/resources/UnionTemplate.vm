@@ -55,21 +55,21 @@ public abstract class $union.typeName#if( !$tp.empty )<$tp>#end {
         @Override
         public String toString() {
             #if( $product.fields.empty )
-            return return "${product.typeName}()";
+            return "${product.typeName}()";
             #else
-            return "${product.typeName}(" +#foreach( $field in $product.fields )#if( $foreach.index > 0)", $field.name = " +#else"$field.name = " +#end#if( $field.type.kind.code != 2) ${util.toGetterName($field)}() +#else Arrays.toString(${util.toGetterName($field)}()) +#end#end')';
+            return "${product.typeName}(" + #foreach( $field in $product.fields )#if( $foreach.index > 0)", $field.name = " + #else"$field.name = " + #end#if( $field.type.kind.code != 2) ${util.toGetterName($field)}() + #else Arrays.toString(${util.toGetterName($field)}()) + #end#end")";
             #end
         }
 
         @Override
         public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof $product.typeName)) return false;
-            $product.typeName that = ($product.typeName) obj;
             #if( $product.fields.empty )
-            return true;
+            return obj != null && getClass() == obj.getClass();
             #else
-            return #foreach($field in $product.fields)#if($foreach.index != 0) &&#end#if($field.type.kind.code == 0) ${util.toGetterName($field)}() == that.${util.toGetterName($field)}()#elseif($field.type.kind.code == 1) Objects.equals(${util.toGetterName($field)}(), that.${util.toGetterName($field)}())#else Arrays.equals(${util.toGetterName($field)}(), that.${util.toGetterName($field)}())#end#end
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            $product.typeName that = ($product.typeName) obj;
+            return #foreach($field in $product.fields)#if($foreach.index != 0) &&#end#if($field.type.kind.code == 0) ${util.toGetterName($field)}() == that.${util.toGetterName($field)}()#elseif($field.type.kind.code == 1) Objects.equals(${util.toGetterName($field)}(), that.${util.toGetterName($field)}())#else Arrays.equals(${util.toGetterName($field)}(), that.${util.toGetterName($field)}())#end#end;
             #end
         }
 
@@ -95,7 +95,7 @@ public abstract class $union.typeName#if( !$tp.empty )<$tp>#end {
     }
 
     #end
-    interface Switch#if( !$tp.empty )<${d}T, $tp>#else<${d}T>#end {
+    public interface Switch#if( !$tp.empty )<${d}T, $tp>#else<${d}T>#end {
         #foreach( $product in $union.productTypes )
         ${d}T is($product.typeName#if( !$ta.empty )<$ta>#end it);
         #end

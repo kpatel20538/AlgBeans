@@ -48,15 +48,15 @@ public abstract class BinaryTree<T> {
 
         @Override
         public String toString() {
-            return "BNode(" +"item = " + getItem() +", left = " + getLeft() +", right = " + getRight() +')';
+            return "BNode(" + "item = " +  getItem() + ", left = " +  getLeft() + ", right = " +  getRight() + ")";
         }
 
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
-            if (!(obj instanceof BNode)) return false;
+            if (obj == null || getClass() != obj.getClass()) return false;
             BNode that = (BNode) obj;
-            return  Objects.equals(getItem(), that.getItem()) && Objects.equals(getLeft(), that.getLeft()) && Objects.equals(getRight(), that.getRight())
+            return  Objects.equals(getItem(), that.getItem()) && Objects.equals(getLeft(), that.getLeft()) && Objects.equals(getRight(), that.getRight());
         }
 
         @Override
@@ -74,15 +74,12 @@ public abstract class BinaryTree<T> {
 
         @Override
         public String toString() {
-            return return "EmptyBNode()";
+            return "EmptyBNode()";
         }
 
         @Override
         public boolean equals(Object obj) {
-            if (this == obj) return true;
-            if (!(obj instanceof EmptyBNode)) return false;
-            EmptyBNode that = (EmptyBNode) obj;
-            return true;
+            return obj != null && getClass() == obj.getClass();
         }
 
         @Override
@@ -92,7 +89,7 @@ public abstract class BinaryTree<T> {
 
     }
 
-    interface Switch<$T, T> {
+    public interface Switch<$T, T> {
         $T is(BNode<T> it);
         $T is(EmptyBNode<T> it);
     }

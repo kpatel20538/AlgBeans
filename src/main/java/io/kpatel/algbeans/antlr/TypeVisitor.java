@@ -53,7 +53,7 @@ public class TypeVisitor extends AlgBeansBaseVisitor<JavaType> {
 
 
     private JavaTypeDecl toTypeDecl(AlgBeansParser.TypeDeclContext ctx) {
-        JavaIdentifier typeName = IdentifierVisitor.visit(ctx.identifier());
+        JavaIdentifier typeName = new IdentifierVisitor().visit(ctx.identifier());
         JavaTypeDecl typeDecl = new JavaTypeDecl(typeName);
         if (ctx.typeArguments() != null) {
             for (AlgBeansParser.TypeArgumentContext typeArgument : ctx.typeArguments().typeArgument()) {

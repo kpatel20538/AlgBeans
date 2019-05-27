@@ -2,8 +2,6 @@ package io.kpatel.algbeans.cli;
 
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
-import io.kpatel.algbeans.CleaningPolicies;
-import io.kpatel.algbeans.CleaningPolicy;
 import io.kpatel.algbeans.CodeTranslator;
 
 import java.io.IOException;
@@ -27,24 +25,15 @@ public class CliMain {
     @Parameter(names = "--help", help = true)
     private boolean help;
 
-    @Parameter(
-            names = "--cleaning-policy",
-            converter = CleaningPolicyConverter.class,
-            validateWith = CleaningPolicyValidator.class
-    )
-    private CleaningPolicy cleaningPolicy = CleaningPolicies.NEVER_CWD;
-
-
     public static void main(String[] args) throws IOException {
         CliMain main = new CliMain();
         JCommander.newBuilder()
                 .addObject(main)
-                .build()
-                .parse(args);
+                .build().parse(args);
         main.run();
     }
 
     public void run() throws IOException {
-        new CodeTranslator().translate(inputPaths, outputDirectory, cleaningPolicy);
+        new CodeTranslator().translate(inputPaths, outputDirectory);
     }
 }

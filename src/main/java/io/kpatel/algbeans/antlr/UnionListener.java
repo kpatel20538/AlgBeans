@@ -73,22 +73,24 @@ public class UnionListener extends AlgBeansBaseListener {
 
     @Override
     public void enterUnionType(AlgBeansParser.UnionTypeContext ctx) {
-        JavaIdentifier typeName = IdentifierVisitor.visit(ctx.identifier());
+        JavaIdentifier typeName = new IdentifierVisitor().visit(ctx.identifier());
         currentUnion = new UnionType(typeName);
         currentUnion.setPackageLine(packageLine);
         for (JavaImport importLine : importLines) {
             currentUnion.addImport(importLine);
         }
         if (ctx.annotation() != null) {
+
             for (AlgBeansParser.AnnotationContext annotationCtx : ctx.annotation()) {
-                currentUnion.addAnnotation(AnnotationVisitor.visit(annotationCtx));
+                AnnotationVisitor annotationVisitor = new AnnotationVisitor();
+                currentUnion.addAnnotation(annotationVisitor.visit(annotationCtx));
             }
         }
     }
 
     @Override
     public void enterTypeParameter(AlgBeansParser.TypeParameterContext ctx) {
-        JavaIdentifier typeName = IdentifierVisitor.visit(ctx.identifier());
+        JavaIdentifier typeName = new IdentifierVisitor().visit(ctx.identifier());
         currentJtp = new JavaTypeParameter(typeName);
     }
 
@@ -108,7 +110,7 @@ public class UnionListener extends AlgBeansBaseListener {
 
     @Override
     public void enterProductType(AlgBeansParser.ProductTypeContext ctx) {
-        JavaIdentifier typeName = IdentifierVisitor.visit(ctx.identifier());
+        JavaIdentifier typeName = new IdentifierVisitor().visit(ctx.identifier());
         currentProduct = new ProductType(typeName);
     }
 
@@ -122,7 +124,7 @@ public class UnionListener extends AlgBeansBaseListener {
     public void enterFieldDeclaration(AlgBeansParser.FieldDeclarationContext ctx) {
         TypeVisitor typeVisitor = new TypeVisitor();
         JavaType type = typeVisitor.visit(ctx.typeName());
-        JavaIdentifier name = IdentifierVisitor.visit(ctx.identifier());
+        JavaIdentifier name = new IdentifierVisitor().visit(ctx.identifier());
         JavaField field = new JavaField(type, name);
         for (TerminalNode node: ctx.MODIFIER()) {
             switch (node.getText().trim()) {

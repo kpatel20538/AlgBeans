@@ -4,12 +4,10 @@ import io.kpatel.algbeans.entity.java.JavaIdentifier;
 import io.kpatel.algbeans.parser.AlgBeansParser;
 
 /**
- *  A Factory function that generates Java Identifiers from ParseTrees.
+ *  A Factory Object that generates Java Identifiers from ParseTrees.
  */
 public class IdentifierVisitor {
-    private IdentifierVisitor() { }
-
-    public static JavaIdentifier visit(AlgBeansParser.IdentifierContext ctx) {
+    public JavaIdentifier visit(AlgBeansParser.IdentifierContext ctx) {
         return new JavaIdentifier(ctx.JAVA_IDENTIFIER().getText());
     }
 }

@@ -30,15 +30,15 @@ public abstract class Either<U, V> {
 
         @Override
         public String toString() {
-            return "Left(" +"item = " + getItem() +')';
+            return "Left(" + "item = " +  getItem() + ")";
         }
 
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
-            if (!(obj instanceof Left)) return false;
+            if (obj == null || getClass() != obj.getClass()) return false;
             Left that = (Left) obj;
-            return  Objects.equals(getItem(), that.getItem())
+            return  Objects.equals(getItem(), that.getItem());
         }
 
         @Override
@@ -73,15 +73,15 @@ public abstract class Either<U, V> {
 
         @Override
         public String toString() {
-            return "Right(" +"item = " + getItem() +')';
+            return "Right(" + "item = " +  getItem() + ")";
         }
 
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
-            if (!(obj instanceof Right)) return false;
+            if (obj == null || getClass() != obj.getClass()) return false;
             Right that = (Right) obj;
-            return  Objects.equals(getItem(), that.getItem())
+            return  Objects.equals(getItem(), that.getItem());
         }
 
         @Override
@@ -91,7 +91,7 @@ public abstract class Either<U, V> {
 
     }
 
-    interface Switch<$T, U, V> {
+    public interface Switch<$T, U, V> {
         $T is(Left<U, V> it);
         $T is(Right<U, V> it);
     }

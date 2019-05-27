@@ -65,15 +65,15 @@ public abstract class People {
 
         @Override
         public String toString() {
-            return "Person(" +"name = " + getName() +", birthday = " + getBirthday() +", prefLocale = " + getPrefLocale() +", contactMethod = " + getContactMethod() +')';
+            return "Person(" + "name = " +  getName() + ", birthday = " +  getBirthday() + ", prefLocale = " +  getPrefLocale() + ", contactMethod = " +  getContactMethod() + ")";
         }
 
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
-            if (!(obj instanceof Person)) return false;
+            if (obj == null || getClass() != obj.getClass()) return false;
             Person that = (Person) obj;
-            return  Objects.equals(getName(), that.getName()) && Objects.equals(getBirthday(), that.getBirthday()) && Objects.equals(getPrefLocale(), that.getPrefLocale()) && Objects.equals(getContactMethod(), that.getContactMethod())
+            return  Objects.equals(getName(), that.getName()) && Objects.equals(getBirthday(), that.getBirthday()) && Objects.equals(getPrefLocale(), that.getPrefLocale()) && Objects.equals(getContactMethod(), that.getContactMethod());
         }
 
         @Override
@@ -83,7 +83,7 @@ public abstract class People {
 
     }
 
-    interface Switch<$T> {
+    public interface Switch<$T> {
         $T is(Person it);
     }
 
