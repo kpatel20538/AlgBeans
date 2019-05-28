@@ -1,8 +1,5 @@
 package io.kpatel.algbeans.util;
 
-import java.io.IOException;
-import java.nio.file.Path;
-import java.util.Objects;
 import java.util.function.Predicate;
 
 @FunctionalInterface

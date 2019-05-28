@@ -15,4 +15,5 @@ public interface ExceptionFunction<U, V, E extends Exception> {
             }
         };
     }
+
 }

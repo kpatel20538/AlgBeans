@@ -7,45 +7,50 @@ import io.kpatel.algbeans.util.DirectoryUtils;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.Writer;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  *  Actor Object that takes in IO paths to translate AlgBean Files to Java Source Files
  */
 public class CodeTranslator {
     public void translate(List<Path> inputPaths, Path outputDirectory) throws IOException {
-        String tempName = String.format("temp-%s", outputDirectory.getFileName());
-        Path tempDirectory = Files.createTempDirectory(tempName);
-
+        Path tempDirectory = setupPhase(outputDirectory);
         List<UnionType> unions = collectPhase(inputPaths);
         generatePhase(tempDirectory, unions);
         cleanPhase(outputDirectory, unions);
-        movePhase(tempDirectory, outputDirectory);
+        DirectoryUtils.moveDirectory(tempDirectory, outputDirectory);
     }
+
+    /* Prepare the Temporary Output Folder */
+    private Path setupPhase(Path outputDirectory) throws IOException {
+        String tempName = String.format("temp-%s", outputDirectory.getFileName());
+        return Files.createTempDirectory(tempName);
+    }
+
+    /** Collect all Unions from the list of Alg Files files */
+    private List<UnionType> collectPhase(List<Path> inputPaths) throws IOException {
+        UnionCollector unionCollector = new UnionCollector();
+        List<UnionType> unions = new ArrayList<>();
+        for (Path inputPath : inputPaths) {
+            try (Reader reader = Files.newBufferedReader(inputPath)) {
+                unions.addAll(unionCollector.collect(reader));
+            }
+        }
+        return unions;
+    }
+
 
     /** Clean up any previous build files  */
     private void cleanPhase(Path outputDirectory, List<UnionType> unions) throws IOException {
         for (UnionType union : unions) {
-            JavaPackage packageLine = union.getPackageLine();
-            if (!packageLine.isDefault())  {
-                Path relTopLevelPkg = packageLine.toPath().getName(0);
-                Path absTopLevelPkg = outputDirectory.resolve(relTopLevelPkg);
-                DirectoryUtils.deleteDirectory(absTopLevelPkg);
-            }
-        }
-    }
-
-    /** Move the new source files to the output directory */
-    private void movePhase(Path tempDirectory, Path outputDirectory) throws IOException {
-        Files.createDirectories(outputDirectory);
-        for ( Path p : Files.walk(tempDirectory).collect(Collectors.toList())) {
-            if (!Files.isDirectory(p)) {
-                Path dest = outputDirectory.resolve(tempDirectory.relativize(p));
-                Files.createDirectories(dest.getParent());
-                Files.move(p, dest, StandardCopyOption.REPLACE_EXISTING);
+            JavaPackage pkg = union.getPackageLine();
+            if (!pkg.isDefault()) {
+                Path relTopLevel = pkg.toPath().getName(0);
+                Path actualTopLevel = outputDirectory.resolve(relTopLevel);
+                DirectoryUtils.deleteDirectory(actualTopLevel);
             }
         }
     }
@@ -64,18 +69,6 @@ public class CodeTranslator {
                 codeGenerator.generate(union, writer);
             }
         }
-    }
-
-    /** Collect all Unions from the list of Alg Files files */
-    private List<UnionType> collectPhase(List<Path> inputPaths) throws IOException {
-        UnionCollector unionCollector = new UnionCollector();
-        List<UnionType> unions = new ArrayList<>();
-        for (Path inputPath: inputPaths) {
-            try(Reader reader = Files.newBufferedReader(inputPath)) {
-                unions.addAll(unionCollector.collect(reader));
-            }
-        }
-        return unions;
     }
 
 }

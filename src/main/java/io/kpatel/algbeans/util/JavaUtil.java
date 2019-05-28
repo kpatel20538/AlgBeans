@@ -1,4 +1,4 @@
-package io.kpatel.algbeans.entity.java;
+package io.kpatel.algbeans.util;
 
 import io.kpatel.algbeans.entity.java.JavaField;
 import io.kpatel.algbeans.entity.java.JavaIdentifier;

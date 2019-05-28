@@ -141,7 +141,7 @@ public abstract class ContactInformation {
         private int[] number;
 
         public Phone() {
-            this.number = {1,2,3,4};
+            this.number = new int [ ] { 1 , 2 , 3 , 4 };
         }
 
         public Phone(int[] number) {
@@ -186,7 +186,7 @@ public abstract class ContactInformation {
         private boolean isCallable;
 
         public Fax() {
-            this.isCallable = false&&(Boolean)true||false&&(34.0>60.0);
+            this.isCallable = false && ( Boolean ) true || false && ( 34.0 > 60.0 );
         }
 
         public Fax(boolean isCallable) {

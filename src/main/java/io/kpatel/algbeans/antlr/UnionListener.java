@@ -6,7 +6,8 @@ import io.kpatel.algbeans.entity.java.JavaField;
 import io.kpatel.algbeans.entity.java.JavaIdentifier;
 import io.kpatel.algbeans.entity.java.JavaImport;
 import io.kpatel.algbeans.entity.java.JavaPackage;
-import io.kpatel.algbeans.entity.java.type.*;
+import io.kpatel.algbeans.entity.java.type.JavaType;
+import io.kpatel.algbeans.entity.java.type.JavaTypeParameter;
 import io.kpatel.algbeans.parser.AlgBeansBaseListener;
 import io.kpatel.algbeans.parser.AlgBeansParser;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -135,7 +136,7 @@ public class UnionListener extends AlgBeansBaseListener {
             }
         }
         if (ctx.fieldInit() != null) {
-            field.setInitializer(ctx.fieldInit().getText().trim());
+            field.setInitializer(new ExpressionVisitor().toString(ctx.fieldInit()));
         }
         currentProduct.addField(field);
     }

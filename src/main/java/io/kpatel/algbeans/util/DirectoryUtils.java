@@ -1,6 +1,5 @@
 package io.kpatel.algbeans.util;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
@@ -47,9 +46,12 @@ public class DirectoryUtils {
     }
 
     public static void deleteDirectory(Path source) throws IOException {
-        Files.walk(source)
-                .sorted(Comparator.reverseOrder())
-                .forEach(ExceptionConsumer.toConsumer(Files::delete));
+        if (Files.exists(source)) {
+            Files.walk(source)
+                    .sorted(Comparator.reverseOrder())
+                    .forEach(ExceptionConsumer.toConsumer(Files::deleteIfExists));
+        }
+
     }
 
     private static Stream<FileTransfer> directoryTransfer(Path source , Path destination) throws IOException {

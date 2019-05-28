@@ -22,7 +22,9 @@ COMMENT_BLOCK    : '/*' .*? '*/' -> skip;
 COMMENT_LINE     : '//' .*? [\n\r]+ -> skip;
 
 PRIMITIVE        : 'float' | 'double' | 'byte' | 'short' | 'int' | 'long' | 'char' | 'boolean';
-OPERATOR         : '<' | '!' | '>' | '=' | '+' | '-' | '*' | '/' | '%' | '~' | '&' | '|' | '^';
+OPERATOR         : '<<=' | '<<' | '<=' | '<' | '!=' | '!' | '>>>=' | '>>>' | '>>=' | '>>' | '>=' | '>'
+                 | '==' | '=' | '++' | '+=' | '+' | '--' | '-=' | '-' | '*=' | '*' | '/=' | '/' | '%='
+                 | '%' | '~' | '&&' | '&' | '&=' | '|=' | '||'  | '|' | '^=' | '^' | ':' | '?';
 MODIFIER         : 'final' | 'transient' | 'volatile' | 'synchronized';
 PACKAGE          : 'package';
 IMPORT           : 'import';

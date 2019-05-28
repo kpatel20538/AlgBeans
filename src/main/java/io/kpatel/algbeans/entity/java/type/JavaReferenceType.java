@@ -1,6 +1,6 @@
 package io.kpatel.algbeans.entity.java.type;
 
-import io.kpatel.algbeans.entity.java.JavaUtil;
+import io.kpatel.algbeans.util.JavaUtil;
 
 import java.util.*;
 

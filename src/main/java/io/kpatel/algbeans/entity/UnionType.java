@@ -1,7 +1,7 @@
 package io.kpatel.algbeans.entity;
 
-import io.kpatel.algbeans.entity.java.JavaImport;
 import io.kpatel.algbeans.entity.java.JavaIdentifier;
+import io.kpatel.algbeans.entity.java.JavaImport;
 import io.kpatel.algbeans.entity.java.JavaPackage;
 import io.kpatel.algbeans.entity.java.type.JavaAnnotation;
 import io.kpatel.algbeans.entity.java.type.JavaTypeParameter;
