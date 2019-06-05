@@ -1,4 +1,4 @@
-package com.example2;
+package com.example.union2;
 
 import java.time.LocalDate;
 import java.util.Locale;
@@ -73,6 +73,31 @@ public abstract class ContactInformation {
         }
 
 
+        public Mail withAddress(String address) {
+            return new Mail(address, getRegion(), getCity(), getCountry(), getPostalCode());
+        }
+
+        public Mail withRegion(String region) {
+            return new Mail(getAddress(), region, getCity(), getCountry(), getPostalCode());
+        }
+
+        public Mail withCity(String city) {
+            return new Mail(getAddress(), getRegion(), city, getCountry(), getPostalCode());
+        }
+
+        public Mail withCountry(String country) {
+            return new Mail(getAddress(), getRegion(), getCity(), country, getPostalCode());
+        }
+
+        public Mail withPostalCode(String postalCode) {
+            return new Mail(getAddress(), getRegion(), getCity(), getCountry(), postalCode);
+        }
+
+        @Override
+        public Mail copy() {
+            return new Mail(getAddress(), getRegion(), getCity(), getCountry(), getPostalCode());
+        }
+
         @Override
         public String toString() {
             return "Mail(" + "address = " +  getAddress() + ", region = " +  getRegion() + ", city = " +  getCity() + ", country = " +  getCountry() + ", postalCode = " +  getPostalCode() + ")";
@@ -117,6 +142,15 @@ public abstract class ContactInformation {
         }
 
 
+        public Email withAddr(String addr) {
+            return new Email(addr);
+        }
+
+        @Override
+        public Email copy() {
+            return new Email(getAddr());
+        }
+
         @Override
         public String toString() {
             return "Email(" + "addr = " +  getAddr() + ")";
@@ -160,6 +194,15 @@ public abstract class ContactInformation {
             this.number = number;
         }
 
+
+        public Phone withNumber(int[] number) {
+            return new Phone(number);
+        }
+
+        @Override
+        public Phone copy() {
+            return new Phone(getNumber());
+        }
 
         @Override
         public String toString() {
@@ -206,6 +249,15 @@ public abstract class ContactInformation {
             this.callable = callable;
         }
 
+
+        public Fax withCallable(boolean callable) {
+            return new Fax(callable);
+        }
+
+        @Override
+        public Fax copy() {
+            return new Fax(isCallable());
+        }
 
         @Override
         public String toString() {
@@ -334,8 +386,46 @@ public abstract class ContactInformation {
             return this;
         };
 
+        public CaseSwitchBuilder<$T> onMail(Supplier<$T> onMail) {
+            this.onMail = it -> onMail.get();
+            return this;
+        };
+        public CaseSwitchBuilder<$T> onEmail(Supplier<$T> onEmail) {
+            this.onEmail = it -> onEmail.get();
+            return this;
+        };
+        public CaseSwitchBuilder<$T> onPhone(Supplier<$T> onPhone) {
+            this.onPhone = it -> onPhone.get();
+            return this;
+        };
+        public CaseSwitchBuilder<$T> onFax(Supplier<$T> onFax) {
+            this.onFax = it -> onFax.get();
+            return this;
+        };
+
+        public CaseSwitchBuilder<$T> onMail($T onMail) {
+            this.onMail = it -> onMail;
+            return this;
+        };
+        public CaseSwitchBuilder<$T> onEmail($T onEmail) {
+            this.onEmail = it -> onEmail;
+            return this;
+        };
+        public CaseSwitchBuilder<$T> onPhone($T onPhone) {
+            this.onPhone = it -> onPhone;
+            return this;
+        };
+        public CaseSwitchBuilder<$T> onFax($T onFax) {
+            this.onFax = it -> onFax;
+            return this;
+        };
+
         public TerminalSwitchBuilder<$T> orElse(Supplier<$T> orElse) {
             return new TerminalSwitchBuilder<>(this, orElse);
+        }
+
+        public TerminalSwitchBuilder<$T> orElse($T orElse) {
+            return new TerminalSwitchBuilder<>(this, () -> orElse);
         }
     }
     public static final class TerminalSwitchBuilder<$T> implements SwitchBuilder<$T> {
@@ -381,9 +471,11 @@ public abstract class ContactInformation {
     }
     ContactInformation() { }
 
+    public abstract ContactInformation copy();
+
     public abstract <$T> $T when(Switch<$T> cases);
 
-    public <$T> CaseSwitchBuilder<$T> createSwitch() {
+    public <$T> CaseSwitchBuilder<$T> switchBuilder() {
         return new CaseSwitchBuilder<>(this);
     }
 }

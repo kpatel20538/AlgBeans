@@ -33,7 +33,25 @@
         };
         #end
 
-        public TerminalSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end orElse(Supplier<$T> orElse) {
+        #foreach( $product in $union.productTypes )
+        public CaseSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end ${util.toSwitchSetterName($product)}(Supplier<$T> ${util.toSwitchSetterName($product)}) {
+            this.${util.toSwitchSetterName($product)} = it -> ${util.toSwitchSetterName($product)}.get();
+            return this;
+        };
+        #end
+
+        #foreach( $product in $union.productTypes )
+        public CaseSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end ${util.toSwitchSetterName($product)}(${d}T ${util.toSwitchSetterName($product)}) {
+            this.${util.toSwitchSetterName($product)} = it -> ${util.toSwitchSetterName($product)};
+            return this;
+        };
+        #end
+
+        public TerminalSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end orElse(Supplier<${d}T> orElse) {
             return new TerminalSwitchBuilder<>(this, orElse);
+        }
+
+        public TerminalSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end orElse(${d}T orElse) {
+            return new TerminalSwitchBuilder<>(this, () -> orElse);
         }
     }

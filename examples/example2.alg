@@ -1,4 +1,4 @@
-package com.example2;
+package com.example.union2;
 
 import java.time.LocalDate;
 import java.util.Locale;

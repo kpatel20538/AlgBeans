@@ -1,4 +1,4 @@
-package com.example;
+package com.example.union;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -26,6 +26,15 @@ public abstract class Either<U, V> {
             this.item = item;
         }
 
+
+        public Left<U, V> withItem(U item) {
+            return new Left(item);
+        }
+
+        @Override
+        public Left<U, V> copy() {
+            return new Left(getItem());
+        }
 
         @Override
         public String toString() {
@@ -70,6 +79,15 @@ public abstract class Either<U, V> {
             this.item = item;
         }
 
+
+        public Right<U, V> withItem(V item) {
+            return new Right(item);
+        }
+
+        @Override
+        public Right<U, V> copy() {
+            return new Right(getItem());
+        }
 
         @Override
         public String toString() {
@@ -160,8 +178,30 @@ public abstract class Either<U, V> {
             return this;
         };
 
+        public CaseSwitchBuilder<$T, U, V> onLeft(Supplier<$T> onLeft) {
+            this.onLeft = it -> onLeft.get();
+            return this;
+        };
+        public CaseSwitchBuilder<$T, U, V> onRight(Supplier<$T> onRight) {
+            this.onRight = it -> onRight.get();
+            return this;
+        };
+
+        public CaseSwitchBuilder<$T, U, V> onLeft($T onLeft) {
+            this.onLeft = it -> onLeft;
+            return this;
+        };
+        public CaseSwitchBuilder<$T, U, V> onRight($T onRight) {
+            this.onRight = it -> onRight;
+            return this;
+        };
+
         public TerminalSwitchBuilder<$T, U, V> orElse(Supplier<$T> orElse) {
             return new TerminalSwitchBuilder<>(this, orElse);
+        }
+
+        public TerminalSwitchBuilder<$T, U, V> orElse($T orElse) {
+            return new TerminalSwitchBuilder<>(this, () -> orElse);
         }
     }
     public static final class TerminalSwitchBuilder<$T, U, V> implements SwitchBuilder<$T, U, V> {
@@ -197,9 +237,11 @@ public abstract class Either<U, V> {
     }
     Either() { }
 
+    public abstract Either<U, V> copy();
+
     public abstract <$T> $T when(Switch<$T, U, V> cases);
 
-    public <$T> CaseSwitchBuilder<$T, U, V> createSwitch() {
+    public <$T> CaseSwitchBuilder<$T, U, V> switchBuilder() {
         return new CaseSwitchBuilder<>(this);
     }
 }

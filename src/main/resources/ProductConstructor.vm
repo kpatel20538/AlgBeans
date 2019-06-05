@@ -1,12 +1,12 @@
-        #if( !$product.fields.empty )
+        #if(!$product.fields.empty)
         public ${product.typeName}() {
-            #foreach( $field in $product.fields )
-            this.$field.name =#if( $field.initializer ) $field.initializer#else $field.type.defaultValue#end;
+            #foreach($field in $product.fields)
+            this.$field.name = $field.initializer;
             #end
         }
 
         public ${product.typeName}(${util.toParameterList($product.fields)}) {
-            #foreach( $field in $product.fields )
+            #foreach($field in $product.fields)
             this.$field.name = $field.name;
             #end
         }

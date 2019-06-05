@@ -1,4 +1,4 @@
-package com.example;
+package com.example.union;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -36,6 +36,19 @@ public abstract class LinkedList<T> {
         }
 
 
+        public UNode<T> withItem(T item) {
+            return new UNode(item, getNext());
+        }
+
+        public UNode<T> withNext(LinkedList<T> next) {
+            return new UNode(getItem(), next);
+        }
+
+        @Override
+        public UNode<T> copy() {
+            return new UNode(getItem(), getNext());
+        }
+
         @Override
         public String toString() {
             return "UNode(" + "item = " +  getItem() + ", next = " +  getNext() + ")";
@@ -63,6 +76,11 @@ public abstract class LinkedList<T> {
 
 
 
+
+        @Override
+        public EmptyUNode<T> copy() {
+            return new EmptyUNode();
+        }
 
         @Override
         public String toString() {
@@ -150,8 +168,30 @@ public abstract class LinkedList<T> {
             return this;
         };
 
+        public CaseSwitchBuilder<$T, T> onUNode(Supplier<$T> onUNode) {
+            this.onUNode = it -> onUNode.get();
+            return this;
+        };
+        public CaseSwitchBuilder<$T, T> onEmptyUNode(Supplier<$T> onEmptyUNode) {
+            this.onEmptyUNode = it -> onEmptyUNode.get();
+            return this;
+        };
+
+        public CaseSwitchBuilder<$T, T> onUNode($T onUNode) {
+            this.onUNode = it -> onUNode;
+            return this;
+        };
+        public CaseSwitchBuilder<$T, T> onEmptyUNode($T onEmptyUNode) {
+            this.onEmptyUNode = it -> onEmptyUNode;
+            return this;
+        };
+
         public TerminalSwitchBuilder<$T, T> orElse(Supplier<$T> orElse) {
             return new TerminalSwitchBuilder<>(this, orElse);
+        }
+
+        public TerminalSwitchBuilder<$T, T> orElse($T orElse) {
+            return new TerminalSwitchBuilder<>(this, () -> orElse);
         }
     }
     public static final class TerminalSwitchBuilder<$T, T> implements SwitchBuilder<$T, T> {
@@ -187,9 +227,11 @@ public abstract class LinkedList<T> {
     }
     LinkedList() { }
 
+    public abstract LinkedList<T> copy();
+
     public abstract <$T> $T when(Switch<$T, T> cases);
 
-    public <$T> CaseSwitchBuilder<$T, T> createSwitch() {
+    public <$T> CaseSwitchBuilder<$T, T> switchBuilder() {
         return new CaseSwitchBuilder<>(this);
     }
 }

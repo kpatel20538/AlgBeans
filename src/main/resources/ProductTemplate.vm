@@ -7,6 +7,8 @@
 
         #parse("ProductMutators.vm")
 
+        #parse("ProductCopiers.vm")
+
         #parse("ProductToString.vm")
 
         #parse("ProductEquals.vm")

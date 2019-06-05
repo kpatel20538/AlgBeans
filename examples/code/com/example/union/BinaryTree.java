@@ -1,4 +1,4 @@
-package com.example;
+package com.example.union;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -45,6 +45,23 @@ public abstract class BinaryTree<T> {
         }
 
 
+        public BNode<T> withItem(T item) {
+            return new BNode(item, getLeft(), getRight());
+        }
+
+        public BNode<T> withLeft(BinaryTree<T> left) {
+            return new BNode(getItem(), left, getRight());
+        }
+
+        public BNode<T> withRight(BinaryTree<T> right) {
+            return new BNode(getItem(), getLeft(), right);
+        }
+
+        @Override
+        public BNode<T> copy() {
+            return new BNode(getItem(), getLeft(), getRight());
+        }
+
         @Override
         public String toString() {
             return "BNode(" + "item = " +  getItem() + ", left = " +  getLeft() + ", right = " +  getRight() + ")";
@@ -72,6 +89,11 @@ public abstract class BinaryTree<T> {
 
 
 
+
+        @Override
+        public EmptyBNode<T> copy() {
+            return new EmptyBNode();
+        }
 
         @Override
         public String toString() {
@@ -159,8 +181,30 @@ public abstract class BinaryTree<T> {
             return this;
         };
 
+        public CaseSwitchBuilder<$T, T> onBNode(Supplier<$T> onBNode) {
+            this.onBNode = it -> onBNode.get();
+            return this;
+        };
+        public CaseSwitchBuilder<$T, T> onEmptyBNode(Supplier<$T> onEmptyBNode) {
+            this.onEmptyBNode = it -> onEmptyBNode.get();
+            return this;
+        };
+
+        public CaseSwitchBuilder<$T, T> onBNode($T onBNode) {
+            this.onBNode = it -> onBNode;
+            return this;
+        };
+        public CaseSwitchBuilder<$T, T> onEmptyBNode($T onEmptyBNode) {
+            this.onEmptyBNode = it -> onEmptyBNode;
+            return this;
+        };
+
         public TerminalSwitchBuilder<$T, T> orElse(Supplier<$T> orElse) {
             return new TerminalSwitchBuilder<>(this, orElse);
+        }
+
+        public TerminalSwitchBuilder<$T, T> orElse($T orElse) {
+            return new TerminalSwitchBuilder<>(this, () -> orElse);
         }
     }
     public static final class TerminalSwitchBuilder<$T, T> implements SwitchBuilder<$T, T> {
@@ -196,9 +240,11 @@ public abstract class BinaryTree<T> {
     }
     BinaryTree() { }
 
+    public abstract BinaryTree<T> copy();
+
     public abstract <$T> $T when(Switch<$T, T> cases);
 
-    public <$T> CaseSwitchBuilder<$T, T> createSwitch() {
+    public <$T> CaseSwitchBuilder<$T, T> switchBuilder() {
         return new CaseSwitchBuilder<>(this);
     }
 }

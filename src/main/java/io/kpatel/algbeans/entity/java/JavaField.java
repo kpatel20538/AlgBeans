@@ -116,11 +116,15 @@ public class JavaField {
     }
 
     public String getInitializer() {
-        return initializer;
+        return initializer.isEmpty() ? getType().getDefaultValue() : initializer;
     }
 
     public void setInitializer(String initializer) {
         this.initializer = initializer;
+    }
+
+    public boolean hasDefaultInitializer() {
+        return initializer.isEmpty();
     }
 
     @Override

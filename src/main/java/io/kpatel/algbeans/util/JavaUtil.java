@@ -90,15 +90,41 @@ public class JavaUtil {
         }
     }
 
+
     /** For use in naming setter methods for fields in Product Types */
     public String toSetterName(JavaField field) {
         String fieldName = field.getName().getId();
-        if (fieldName.startsWith("is") && fieldName.length() > 3 && Character.isUpperCase(fieldName.charAt(2))) {
+        if (field.getType() == JavaPrimitiveType.BOOLEAN && fieldName.startsWith("is") && fieldName.length() > 3 && Character.isUpperCase(fieldName.charAt(2))) {
             return String.format("set%s", fieldName.substring(2));
         } else {
             return String.format("set%s", capitalize(fieldName));
         }
     }
+
+    /** For use in naming getter methods for fields in Product Types */
+    public String toWitherName(JavaField field) {
+        String fieldName = field.getName().getId();
+        if (field.getType() == JavaPrimitiveType.BOOLEAN && fieldName.startsWith("is") && fieldName.length() > 3 && Character.isUpperCase(fieldName.charAt(2))) {
+            return String.format("with%s", fieldName.substring(2));
+        } else {
+            return String.format("with%s", capitalize(fieldName));
+        }
+    }
+
+    /** For use in naming getter methods for fields in Product Types */
+    public String toWitherParameterList(List<JavaField> fields, JavaField targetField) {
+        StringJoiner joiner = new StringJoiner(", ");
+        for (JavaField field: fields) {
+            if (!field.equals(targetField)) {
+                joiner.add(String.format("%s()", toGetterName(field)));
+            } else {
+                joiner.add(field.getName().getId());
+            }
+        }
+        return joiner.toString();
+    }
+
+
 
     /** For use in naming getter methods for function-type fields in SwitchBuilders */
     public String toSwitchGetterName(ProductType product) {

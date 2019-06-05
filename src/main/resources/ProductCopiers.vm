@@ -1,0 +1,10 @@
+        #foreach( $field in $product.fields )
+        public ${product.typeName}#if( !$ta.empty )<$ta>#end ${util.toWitherName($field)}($field.type $field.name) {
+            return new ${product.typeName}(#foreach( $arg in $product.fields )#if($foreach.index != 0), #end#if(!$arg.equals($field))${util.toGetterName($arg)}()#else${arg.name}#end#end);
+        }
+
+        #end
+        @Override
+        public ${product.typeName}#if( !$ta.empty )<$ta>#end copy() {
+            return new ${product.typeName}(#foreach( $field in $product.fields )#if($foreach.index != 0), #end${util.toGetterName($field)}()#end);
+        }

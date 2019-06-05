@@ -1,4 +1,4 @@
-package com.example;
+package com.example.union;
 
 import java.util.Objects;
 import java.util.Arrays;
@@ -27,6 +27,15 @@ public abstract class Optional<T> {
         }
 
 
+        public Exists<T> withItem(T item) {
+            return new Exists(item);
+        }
+
+        @Override
+        public Exists<T> copy() {
+            return new Exists(getItem());
+        }
+
         @Override
         public String toString() {
             return "Exists(" + "item = " +  getItem() + ")";
@@ -54,6 +63,11 @@ public abstract class Optional<T> {
 
 
 
+
+        @Override
+        public NoExists<T> copy() {
+            return new NoExists();
+        }
 
         @Override
         public String toString() {
@@ -141,8 +155,30 @@ public abstract class Optional<T> {
             return this;
         };
 
+        public CaseSwitchBuilder<$T, T> onExists(Supplier<$T> onExists) {
+            this.onExists = it -> onExists.get();
+            return this;
+        };
+        public CaseSwitchBuilder<$T, T> onNoExists(Supplier<$T> onNoExists) {
+            this.onNoExists = it -> onNoExists.get();
+            return this;
+        };
+
+        public CaseSwitchBuilder<$T, T> onExists($T onExists) {
+            this.onExists = it -> onExists;
+            return this;
+        };
+        public CaseSwitchBuilder<$T, T> onNoExists($T onNoExists) {
+            this.onNoExists = it -> onNoExists;
+            return this;
+        };
+
         public TerminalSwitchBuilder<$T, T> orElse(Supplier<$T> orElse) {
             return new TerminalSwitchBuilder<>(this, orElse);
+        }
+
+        public TerminalSwitchBuilder<$T, T> orElse($T orElse) {
+            return new TerminalSwitchBuilder<>(this, () -> orElse);
         }
     }
     public static final class TerminalSwitchBuilder<$T, T> implements SwitchBuilder<$T, T> {
@@ -178,9 +214,11 @@ public abstract class Optional<T> {
     }
     Optional() { }
 
+    public abstract Optional<T> copy();
+
     public abstract <$T> $T when(Switch<$T, T> cases);
 
-    public <$T> CaseSwitchBuilder<$T, T> createSwitch() {
+    public <$T> CaseSwitchBuilder<$T, T> switchBuilder() {
         return new CaseSwitchBuilder<>(this);
     }
 }

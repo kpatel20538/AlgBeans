@@ -31,9 +31,11 @@ public abstract class $union.typeName#if( !$tp.empty )<$tp>#end {
 
     ${union.typeName}() { }
 
+    public abstract ${union.typeName}#if( !$ta.empty )<$ta>#end copy();
+
     public abstract <${d}T> ${d}T when(Switch#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end cases);
 
-    public <${d}T> CaseSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end createSwitch() {
+    public <${d}T> CaseSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end switchBuilder() {
         return new CaseSwitchBuilder<>(this);
     }
 }
