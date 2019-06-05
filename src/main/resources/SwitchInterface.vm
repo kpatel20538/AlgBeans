@@ -1,0 +1,5 @@
+    public interface Switch#if( !$tp.empty )<${d}T, $tp>#else<${d}T>#end {
+        #foreach( $product in $union.productTypes )
+        ${d}T is($product.typeName#if( !$ta.empty )<$ta>#end it);
+        #end
+    }

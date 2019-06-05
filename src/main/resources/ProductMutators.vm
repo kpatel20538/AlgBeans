@@ -1,0 +1,8 @@
+        #foreach( $field in $product.fields )
+        #if( !$field.final )
+        public#if( $field.synchronized ) synchronized#end void ${util.toSetterName($field)}($field.type $field.name) {
+            this.$field.name = $field.name;
+        }
+
+        #end
+        #end

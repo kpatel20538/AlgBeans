@@ -1,0 +1,8 @@
+        @Override
+        public String toString() {
+            #if( $product.fields.empty )
+            return "${product.typeName}()";
+            #else
+            return "${product.typeName}(" + #foreach( $field in $product.fields )#if( $foreach.index > 0)", $field.name = " + #else"$field.name = " + #end#if( $field.type.kind.code != 2) ${util.toGetterName($field)}() + #else Arrays.toString(${util.toGetterName($field)}()) + #end#end")";
+            #end
+        }

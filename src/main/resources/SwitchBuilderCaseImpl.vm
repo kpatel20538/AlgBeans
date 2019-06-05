@@ -1,0 +1,39 @@
+    public static final class CaseSwitchBuilder#if( !$tp.empty )<${d}T, $tp>#else<${d}T>#end implements SwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end {
+        private final $union.typeName#if( !$ta.empty )<$ta>#end value;
+        #foreach( $product in $union.productTypes )
+        private Function<$product.typeName#if( !$ta.empty )<$ta>#end,$T> ${util.toSwitchSetterName($product)};
+        #end
+
+        CaseSwitchBuilder($union.typeName#if( !$ta.empty )<$ta>#end value) {
+            this.value = value;
+            #foreach( $product in $union.productTypes )
+            this.${util.toSwitchSetterName($product)} = null;
+            #end
+        }
+
+        @Override
+        public $union.typeName#if( !$ta.empty )<$ta>#end getValue() {
+            return value;
+        }
+
+        #foreach( $product in $union.productTypes )
+        public Function<$product.typeName#if( !$ta.empty )<$ta>#end,$T> ${util.toSwitchGetterName($product)}() {
+            if (${util.toSwitchSetterName($product)} != null) {
+                return ${util.toSwitchSetterName($product)};
+            } else {
+                throw new NullPointerException();
+            }
+        };
+        #end
+
+        #foreach( $product in $union.productTypes )
+        public CaseSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end ${util.toSwitchSetterName($product)}(Function<$product.typeName#if( !$ta.empty )<$ta>#end,$T> ${util.toSwitchSetterName($product)}) {
+            this.${util.toSwitchSetterName($product)} = ${util.toSwitchSetterName($product)};
+            return this;
+        };
+        #end
+
+        public TerminalSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end orElse(Supplier<$T> orElse) {
+            return new TerminalSwitchBuilder<>(this, orElse);
+        }
+    }

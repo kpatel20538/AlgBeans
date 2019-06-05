@@ -4,7 +4,8 @@ import java.time.LocalDate;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Arrays;
-
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public abstract class People {
     public final static class Person extends People {
@@ -31,37 +32,35 @@ public abstract class People {
             return name;
         }
 
-        public void setName(String name) {
-            this.name = name;
-        }
-
         public LocalDate getBirthday() {
             return birthday;
-        }
-
-        public void setBirthday(LocalDate birthday) {
-            this.birthday = birthday;
         }
 
         public Locale getPrefLocale() {
             return prefLocale;
         }
 
-        public void setPrefLocale(Locale prefLocale) {
-            this.prefLocale = prefLocale;
-        }
-
         public Contact getContactMethod() {
             return contactMethod;
+        }
+
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public void setBirthday(LocalDate birthday) {
+            this.birthday = birthday;
+        }
+
+        public void setPrefLocale(Locale prefLocale) {
+            this.prefLocale = prefLocale;
         }
 
         public void setContactMethod(Contact contactMethod) {
             this.contactMethod = contactMethod;
         }
 
-        public <$T> $T when(Switch<$T> cases) {
-            return cases.is(this);
-        }
 
         @Override
         public String toString() {
@@ -73,7 +72,7 @@ public abstract class People {
             if (this == obj) return true;
             if (obj == null || getClass() != obj.getClass()) return false;
             Person that = (Person) obj;
-            return  Objects.equals(getName(), that.getName()) && Objects.equals(getBirthday(), that.getBirthday()) && Objects.equals(getPrefLocale(), that.getPrefLocale()) && Objects.equals(getContactMethod(), that.getContactMethod());
+            return Objects.equals(getName(), that.getName()) && Objects.equals(getBirthday(), that.getBirthday()) && Objects.equals(getPrefLocale(), that.getPrefLocale()) && Objects.equals(getContactMethod(), that.getContactMethod());
         }
 
         @Override
@@ -81,13 +80,93 @@ public abstract class People {
             return Objects.hash(getName(), getBirthday(), getPrefLocale(), getContactMethod());
         }
 
-    }
+        public <$T> $T when(Switch<$T> cases) {
+            return cases.is(this);
+        }
 
+    }
     public interface Switch<$T> {
         $T is(Person it);
     }
+    public interface SwitchBuilder<$T> {
+        People getValue();
+        Function<Person,$T> getOnPerson();
 
+        default Switch<$T> build() {
+            Function<Person,$T> onPerson = getOnPerson();
+            return new Switch<$T>() {
+                public $T is(Person it) {
+                    return onPerson.apply(it);
+                }
+            };
+        }
+
+        default $T apply() {
+            return getValue().when(build());
+        }
+    }
+    public static final class CaseSwitchBuilder<$T> implements SwitchBuilder<$T> {
+        private final People value;
+        private Function<Person,$T> onPerson;
+
+        CaseSwitchBuilder(People value) {
+            this.value = value;
+            this.onPerson = null;
+        }
+
+        @Override
+        public People getValue() {
+            return value;
+        }
+
+        public Function<Person,$T> getOnPerson() {
+            if (onPerson != null) {
+                return onPerson;
+            } else {
+                throw new NullPointerException();
+            }
+        };
+
+        public CaseSwitchBuilder<$T> onPerson(Function<Person,$T> onPerson) {
+            this.onPerson = onPerson;
+            return this;
+        };
+
+        public TerminalSwitchBuilder<$T> orElse(Supplier<$T> orElse) {
+            return new TerminalSwitchBuilder<>(this, orElse);
+        }
+    }
+    public static final class TerminalSwitchBuilder<$T> implements SwitchBuilder<$T> {
+        private final SwitchBuilder<$T> switchBuilder;
+        private final Supplier<$T> orElse;
+        TerminalSwitchBuilder(SwitchBuilder<$T> switchBuilder, Supplier<$T> orElse) {
+            if (orElse == null) {
+                throw new NullPointerException();
+            }
+            this.switchBuilder = switchBuilder;
+            this.orElse = orElse;
+        }
+
+        private <$R> Function<$R, $T> ensureFunction(Function<$R, $T> func) {
+            return func != null ? func : it -> orElse.get();
+        }
+
+        @Override
+        public People getValue() {
+            return switchBuilder.getValue();
+        }
+
+        @Override
+        public Function<Person, $T> getOnPerson() {
+            return ensureFunction(switchBuilder.getOnPerson());
+        }
+
+    }
     People() { }
 
     public abstract <$T> $T when(Switch<$T> cases);
+
+    public <$T> CaseSwitchBuilder<$T> createSwitch() {
+        return new CaseSwitchBuilder<>(this);
+    }
 }

@@ -1,0 +1,3 @@
+        #foreach( $field in $product.fields )
+        private#if( $field.final ) final#end#if( $field.transient ) transient#end#if( $field.volatile ) volatile#end $field.type $field.name;
+        #end

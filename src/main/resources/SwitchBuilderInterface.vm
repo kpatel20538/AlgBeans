@@ -1,0 +1,23 @@
+    public interface SwitchBuilder#if( !$tp.empty )<${d}T, $tp>#else<${d}T>#end {
+        $union.typeName#if( !$ta.empty )<$ta>#end getValue();
+        #foreach( $product in $union.productTypes )
+        Function<$product.typeName#if( !$ta.empty )<$ta>#end,$T> ${util.toSwitchGetterName($product)}();
+        #end
+
+        default Switch#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end build() {
+            #foreach( $product in $union.productTypes )
+            Function<$product.typeName#if( !$ta.empty )<$ta>#end,$T> ${util.toSwitchSetterName($product)} = ${util.toSwitchGetterName($product)}();
+            #end
+            return new Switch#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end() {
+                #foreach( $product in $union.productTypes )
+                public ${d}T is($product.typeName#if( !$ta.empty )<$ta>#end it) {
+                    return ${util.toSwitchSetterName($product)}.apply(it);
+                }
+                #end
+            };
+        }
+
+        default ${d}T apply() {
+            return getValue().when(build());
+        }
+    }

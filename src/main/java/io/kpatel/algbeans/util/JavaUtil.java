@@ -1,11 +1,15 @@
 package io.kpatel.algbeans.util;
 
+import io.kpatel.algbeans.entity.ProductType;
 import io.kpatel.algbeans.entity.java.JavaField;
 import io.kpatel.algbeans.entity.java.JavaIdentifier;
 import io.kpatel.algbeans.entity.java.type.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A Stateless Utility Class that aids the template engine and JavaType implementers
@@ -13,15 +17,14 @@ import java.util.List;
  * @see JavaType
  */
 public class JavaUtil {
+
     /** Common code for use in template engine and JavaType implementers */
     public String toDelimitedList(List<?> objects, String delimiter) {
-        if (objects.isEmpty()) return "";
-        StringBuilder delimited = new StringBuilder(objects.get(0).toString());
-        for (int i = 1; i < objects.size(); i++) {
-            delimited.append(delimiter)
-                    .append(objects.get(i));
+        StringJoiner joiner = new StringJoiner(delimiter);
+        for (Object obj: objects) {
+            joiner.add(obj.toString());
         }
-        return delimited.toString();
+        return joiner.toString();
     }
 
     /** For use in the full-arg constructor of Product Types */
@@ -77,15 +80,36 @@ public class JavaUtil {
 
     /** For use in naming getter methods for fields in Product Types */
     public String toGetterName(JavaField field) {
-        String template = field.getType() == JavaPrimitiveType.BOOLEAN
-                ? "is%s" : "get%s";
-
-        return String.format(template, capitalize(field.getName().getId()));
+        String fieldName = field.getName().getId();
+        if (field.getType() != JavaPrimitiveType.BOOLEAN) {
+            return String.format("get%s", capitalize(fieldName));
+        } else if (fieldName.startsWith("is") && fieldName.length() > 3 && Character.isUpperCase(fieldName.charAt(2))) {
+            return fieldName;
+        } else {
+            return String.format("is%s", capitalize(fieldName));
+        }
     }
 
     /** For use in naming setter methods for fields in Product Types */
     public String toSetterName(JavaField field) {
-        return String.format("set%s", capitalize(field.getName().getId()));
+        String fieldName = field.getName().getId();
+        if (fieldName.startsWith("is") && fieldName.length() > 3 && Character.isUpperCase(fieldName.charAt(2))) {
+            return String.format("set%s", fieldName.substring(2));
+        } else {
+            return String.format("set%s", capitalize(fieldName));
+        }
+    }
+
+    /** For use in naming getter methods for function-type fields in SwitchBuilders */
+    public String toSwitchGetterName(ProductType product) {
+        String typeName = product.getTypeName().getId();
+        return String.format("getOn%s", capitalize(typeName));
+    }
+
+    /** For use in naming setter methods for function-type fields in SwitchBuilders */
+    public String toSwitchSetterName(ProductType product) {
+        String typeName = product.getTypeName().getId();
+        return String.format("on%s", capitalize(typeName));
     }
 
     /** Common code between the naming of getter and setter methods in Product Types */

@@ -7,7 +7,8 @@ import#if( $importLine.static ) static#end $importLine.pattern;
 #end
 import java.util.Objects;
 import java.util.Arrays;
-
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 #set( $tp = $util.toTypeParameterCode($union.typeParameters) )
 #set( $ta = $util.toTypeArgumentsCode($union.typeParameters) )
@@ -17,91 +18,22 @@ import java.util.Arrays;
 #end
 public abstract class $union.typeName#if( !$tp.empty )<$tp>#end {
     #foreach( $product in $union.productTypes )
-    public final static class $product.typeName#if( !$tp.empty )<$tp>#end extends $union.typeName#if( !$ta.empty )<$ta>#end {
-        #foreach( $field in $product.fields )
-        private#if( $field.final ) final#end#if( $field.transient ) transient#end#if( $field.volatile ) volatile#end $field.type $field.name;
-        #end
-
-        #if( !$product.fields.empty )
-        public ${product.typeName}() {
-            #foreach( $field in $product.fields )
-            this.$field.name =#if( $field.initializer ) $field.initializer#else $field.type.defaultValue#end;
-            #end
-        }
-
-        public ${product.typeName}(${util.toParameterList($product.fields)}) {
-            #foreach( $field in $product.fields )
-            this.$field.name = $field.name;
-            #end
-        }
-
-        #end
-        #foreach( $field in $product.fields )
-        public#if( $field.synchronized ) synchronized#end $field.type ${util.toGetterName($field)}() {
-            return $field.name;
-        }
-
-        #if( !$field.final )
-        public#if( $field.synchronized ) synchronized#end void ${util.toSetterName($field)}($field.type $field.name) {
-            this.$field.name = $field.name;
-        }
-
-        #end
-        #end
-        public <${d}T> ${d}T when(Switch#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end cases) {
-            return cases.is(this);
-        }
-
-        @Override
-        public String toString() {
-            #if( $product.fields.empty )
-            return "${product.typeName}()";
-            #else
-            return "${product.typeName}(" + #foreach( $field in $product.fields )#if( $foreach.index > 0)", $field.name = " + #else"$field.name = " + #end#if( $field.type.kind.code != 2) ${util.toGetterName($field)}() + #else Arrays.toString(${util.toGetterName($field)}()) + #end#end")";
-            #end
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            #if( $product.fields.empty )
-            return obj != null && getClass() == obj.getClass();
-            #else
-            if (this == obj) return true;
-            if (obj == null || getClass() != obj.getClass()) return false;
-            $product.typeName that = ($product.typeName) obj;
-            return #foreach($field in $product.fields)#if($foreach.index != 0) &&#end#if($field.type.kind.code == 0) ${util.toGetterName($field)}() == that.${util.toGetterName($field)}()#elseif($field.type.kind.code == 1) Objects.equals(${util.toGetterName($field)}(), that.${util.toGetterName($field)}())#else Arrays.equals(${util.toGetterName($field)}(), that.${util.toGetterName($field)}())#end#end;
-            #end
-        }
-
-        @Override
-        public int hashCode() {
-            #if( $product.fields.empty )
-            return 0;
-            #elseif ( $util.byKind($product.fields, 2).empty )
-            return Objects.hash(#foreach( $field in $product.fields )#if( $foreach.index > 0), ${util.toGetterName($field).trim()}()#else${util.toGetterName($field)}()#end#end);
-            #else
-            #if ( $util.byNotKind($product.fields, 2).empty )
-            int code = 0;
-            #else
-            int code = Objects.hash(#foreach( $field in $util.byNotKind($product.fields, 2) )#if( $foreach.index > 0), #end ${util.toGetterName($field).trim()}()#end );
-            #end
-            #foreach( $field in $util.byKind($product.fields, 2) )
-            code = 37 * code + Arrays.hashCode(${util.toGetterName($field)}());
-            #end
-            return code;
-            #end
-        }
-
-    }
+    #parse("ProductTemplate.vm")
 
     #end
-    public interface Switch#if( !$tp.empty )<${d}T, $tp>#else<${d}T>#end {
-        #foreach( $product in $union.productTypes )
-        ${d}T is($product.typeName#if( !$ta.empty )<$ta>#end it);
-        #end
-    }
+    #parse("SwitchInterface.vm")
+
+    #parse("SwitchBuilderInterface.vm")
+
+    #parse("SwitchBuilderCaseImpl.vm")
+
+    #parse("SwitchBuilderTerminalImpl.vm")
 
     ${union.typeName}() { }
 
     public abstract <${d}T> ${d}T when(Switch#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end cases);
+
+    public <${d}T> CaseSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end createSwitch() {
+        return new CaseSwitchBuilder<>(this);
+    }
 }

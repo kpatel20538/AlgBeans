@@ -1,0 +1,18 @@
+        @Override
+        public int hashCode() {
+            #if( $product.fields.empty )
+            return 0;
+            #elseif ( $util.byKind($product.fields, 2).empty )
+            return Objects.hash(#foreach( $field in $product.fields )#if( $foreach.index > 0), ${util.toGetterName($field).trim()}()#else${util.toGetterName($field)}()#end#end);
+            #else
+            #if ( $util.byNotKind($product.fields, 2).empty )
+            int code = 0;
+            #else
+            int code = Objects.hash(#foreach( $field in $util.byNotKind($product.fields, 2) )#if( $foreach.index > 0), #end ${util.toGetterName($field).trim()}()#end );
+            #end
+            #foreach( $field in $util.byKind($product.fields, 2) )
+            code = 37 * code + Arrays.hashCode(${util.toGetterName($field)}());
+            #end
+            return code;
+            #end
+        }

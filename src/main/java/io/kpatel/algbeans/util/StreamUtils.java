@@ -7,12 +7,13 @@ import java.util.function.IntSupplier;
 import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+import java.util.stream.StreamSupport;
 
 public class StreamUtils {
     public static <E> Stream<E> walk(Function<E, Stream<E>> neighbors, Supplier<E> root) {
         Stream.Builder<E> builder = Stream.builder();
         ArrayDeque<E> nodes = new ArrayDeque<>();
-        nodes.add(root.get());
+        nodes.offerLast(root.get());
         while (!nodes.isEmpty()) {
             E node = nodes.pollLast();
             builder.add(node);
@@ -31,5 +32,9 @@ public class StreamUtils {
         return IntStream.iterate(size.getAsInt() - 1, i -> i - 1)
                 .limit(size.getAsInt())
                 .mapToObj(get);
+    }
+
+    public static <E> Stream<E> iterable(Iterable<E> iterable) {
+        return StreamSupport.stream(iterable.spliterator(), false);
     }
 }

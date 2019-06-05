@@ -1,0 +1,11 @@
+        @Override
+        public boolean equals(Object obj) {
+            #if( $product.fields.empty )
+            return obj != null && getClass() == obj.getClass();
+            #else
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            $product.typeName that = ($product.typeName) obj;
+            return#foreach($field in $product.fields)#if($foreach.index != 0) &&#end#if($field.type.kind.code == 0) ${util.toGetterName($field)}() == that.${util.toGetterName($field)}()#elseif($field.type.kind.code == 1) Objects.equals(${util.toGetterName($field)}(), that.${util.toGetterName($field)}())#else Arrays.equals(${util.toGetterName($field)}(), that.${util.toGetterName($field)}())#end#end;
+            #end
+        }

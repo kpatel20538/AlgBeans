@@ -26,6 +26,8 @@ public class CodeGenerator {
 
         context = new VelocityContext();
         context.put("util", new JavaUtil());
+
+
     }
 
     public void generate(UnionType union, Writer writer) {

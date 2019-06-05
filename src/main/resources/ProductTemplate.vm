@@ -1,0 +1,20 @@
+    public final static class $product.typeName#if( !$tp.empty )<$tp>#end extends $union.typeName#if( !$ta.empty )<$ta>#end {
+        #parse("ProductFields.vm")
+
+        #parse("ProductConstructor.vm")
+
+        #parse("ProductAccessors.vm")
+
+        #parse("ProductMutators.vm")
+
+        #parse("ProductToString.vm")
+
+        #parse("ProductEquals.vm")
+
+        #parse("ProductHashCode.vm")
+
+        public <${d}T> ${d}T when(Switch#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end cases) {
+            return cases.is(this);
+        }
+
+    }
