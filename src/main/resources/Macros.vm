@@ -1,0 +1,39 @@
+
+#set( $gt = "$T" )
+#set( $gr = "$R" )
+#macro( drop $jId $cut )$jId.id.substring($cut)#end
+#macro( delimit $list $delimiter )#foreach($item in $list)#if($foreach.index != 0)$delimiter#end$!bodyContent#end#end
+#macro( capitalize $jId )
+#if( !$jId.id.empty )${jId.id.substring(0, 1).toUpperCase()}#drop( $jId 1 )#end
+#end
+#macro( synchronized $jField )#if( $jField.synchronized )synchronized #end#end
+#macro( tp )#@delimit( $union.typeParameters ", ")$item#end#end
+#macro( ta )#@delimit( $union.typeParameters ", ")$item.toTypeArgument()#end#end
+#macro( constructorCall $simpleName )new $simpleName#if( !$union.typeParameters.empty )<>#end#end
+#macro( typeDeclaration $simpleName )$simpleName#if( !$union.typeParameters.empty )<#tp>#end#end
+#macro( genericTypeDeclaration $simpleName $typeParameter )$simpleName#if( !$union.typeParameters.empty )<$typeParameter, #tp>#else<$typeParameter>#end#end
+#macro( typeInstance $simpleName )$simpleName#if( !$union.typeParameters.empty )<#ta>#end#end
+#macro( genericTypeInstance $simpleName $typeParameter )$simpleName#if( !$$union.typeParameters.empty )<$typeParameter, #ta>#else<$typeParameter>#end#end
+#macro( getterName $jField )
+#if( !$util.isBoolean($jField.type) )
+get#capitalize( $jField.name )#elseif($util.startsWithIs($jField.name))
+$jField.name#else
+is#capitalize( $jField.name )#end
+#end
+#macro( setterName $jField )
+#if( $util.isBoolean($jField.type) && $util.startsWithIs($jField.name))
+set#drop( $jField.name 2 )#else
+set#capitalize( $jField.name )#end
+#end
+#macro( witherName $jField )
+#if( $util.isBoolean($jField.type) && $util.startsWithIs($jField.name))
+with#drop( $jField.name 2 )#else
+with#capitalize( $jField.name )#end
+#end
+#macro( witherName $jField )
+#if( $util.isBoolean($jField.type) && $util.startsWithIs($jField.name))
+with#drop( $jField.name 2 )#else
+with#capitalize( $jField.name )#end
+#end
+#macro( bGetterName $jProduct )getOn#capitalize( $jProduct.typeName )#end
+#macro( bSetterName $jProduct )on#capitalize( $jProduct.typeName )#end

@@ -5,7 +5,7 @@
             #end
         }
 
-        public ${product.typeName}(${util.toParameterList($product.fields)}) {
+        public ${product.typeName}(#@delimit( $product.fields ", ")$item.type $item.name#end) {
             #foreach($field in $product.fields)
             this.$field.name = $field.name;
             #end

@@ -1,23 +1,25 @@
-    public interface SwitchBuilder#if( !$tp.empty )<${d}T, $tp>#else<${d}T>#end {
-        $union.typeName#if( !$ta.empty )<$ta>#end getValue();
+    public interface #genericTypeDeclaration("SwitchBuilder" $gt) {
+        #typeInstance($union.typeName) getValue();
         #foreach( $product in $union.productTypes )
-        Function<$product.typeName#if( !$ta.empty )<$ta>#end,$T> ${util.toSwitchGetterName($product)}();
+        Function<#typeInstance($product.typeName),$gt> #bGetterName($product)();
         #end
 
-        default Switch#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end build() {
+        default #genericTypeInstance("Switch" $gt) build() {
             #foreach( $product in $union.productTypes )
-            Function<$product.typeName#if( !$ta.empty )<$ta>#end,$T> ${util.toSwitchSetterName($product)} = ${util.toSwitchGetterName($product)}();
+            Function<#typeInstance($product.typeName),$gt> #bSetterName($product) = #bGetterName($product)();
             #end
-            return new Switch#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end() {
+
+            return new #genericTypeInstance("Switch" $gt)() {
                 #foreach( $product in $union.productTypes )
-                public ${d}T is($product.typeName#if( !$ta.empty )<$ta>#end it) {
-                    return ${util.toSwitchSetterName($product)}.apply(it);
+                public $gt is(#typeInstance($product.typeName) it) {
+                    return #bSetterName($product).apply(it);
                 }
+
                 #end
             };
         }
 
-        default ${d}T apply() {
+        default $gt apply() {
             return getValue().when(build());
         }
     }

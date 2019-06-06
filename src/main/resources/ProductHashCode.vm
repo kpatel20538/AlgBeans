@@ -3,16 +3,17 @@
             #if( $product.fields.empty )
             return 0;
             #elseif ( $util.byKind($product.fields, 2).empty )
-            return Objects.hash(#foreach( $field in $product.fields )#if( $foreach.index > 0), ${util.toGetterName($field).trim()}()#else${util.toGetterName($field)}()#end#end);
+            return Objects.hash(#@delimit( $product.fields ", ")#getterName($item)()#end);
             #else
             #if ( $util.byNotKind($product.fields, 2).empty )
             int code = 0;
             #else
-            int code = Objects.hash(#foreach( $field in $util.byNotKind($product.fields, 2) )#if( $foreach.index > 0), #end ${util.toGetterName($field).trim()}()#end );
+            int code = Objects.hash(#@delimit( $util.byNotKind($product.fields, 2) ", ")#getterName($item)()#end);
             #end
             #foreach( $field in $util.byKind($product.fields, 2) )
-            code = 37 * code + Arrays.hashCode(${util.toGetterName($field)}());
+            code = 37 * code + Arrays.hashCode(#getterName($field)());
             #end
             return code;
             #end
         }
+

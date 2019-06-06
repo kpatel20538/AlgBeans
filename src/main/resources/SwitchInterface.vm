@@ -1,5 +1,5 @@
-    public interface Switch#if( !$tp.empty )<${d}T, $tp>#else<${d}T>#end {
+    public interface #genericTypeDeclaration("Switch" $gt) {
         #foreach( $product in $union.productTypes )
-        ${d}T is($product.typeName#if( !$ta.empty )<$ta>#end it);
+        $gt is(#typeInstance($product.typeName) it);
         #end
     }

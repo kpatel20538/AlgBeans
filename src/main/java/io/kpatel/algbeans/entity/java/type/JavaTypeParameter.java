@@ -40,6 +40,14 @@ public class JavaTypeParameter {
         bounds.add(Objects.requireNonNull(bound));
     }
 
+    public JavaTypeArgument toTypeArgument() {
+        JavaReferenceType referenceType = new JavaReferenceType();
+        JavaTypeDecl typeDecl = new JavaTypeDecl(getTypeName());
+        referenceType.addTypeDecls(typeDecl);
+
+        return new JavaTypeArgument(JavaTypeArgument.Bound.SPECIFICALLY, referenceType);
+    }
+
     @Override
     public String toString() {
         if(bounds.isEmpty()) {

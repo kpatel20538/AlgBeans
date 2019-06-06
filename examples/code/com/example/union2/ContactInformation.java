@@ -1,7 +1,9 @@
+
 package com.example.union2;
 
 import java.time.LocalDate;
 import java.util.Locale;
+import java.util.function.DoubleFunction;
 import java.util.Objects;
 import java.util.Arrays;
 import java.util.function.Function;
@@ -9,21 +11,21 @@ import java.util.function.Supplier;
 
 public abstract class ContactInformation {
     public final static class Mail extends ContactInformation {
-        private String address;
+        private double address;
         private String region;
         private String city;
         private String country;
         private String postalCode;
 
         public Mail() {
-            this.address = null;
+            this.address = ( ( DoubleFunction < Integer > ) d -> Double . valueOf ( Double . compare ( 10 , 20 ) * 10.0 ) . intValue ( ) ) . apply ( new int [ ] { 4 , 5 } [ 1 ] ) * 10.0;
             this.region = null;
             this.city = null;
             this.country = null;
             this.postalCode = "34344";
         }
 
-        public Mail(String address, String region, String city, String country, String postalCode) {
+        public Mail(double address, String region, String city, String country, String postalCode) {
             this.address = address;
             this.region = region;
             this.city = city;
@@ -31,7 +33,7 @@ public abstract class ContactInformation {
             this.postalCode = postalCode;
         }
 
-        public String getAddress() {
+        public double getAddress() {
             return address;
         }
 
@@ -52,7 +54,7 @@ public abstract class ContactInformation {
         }
 
 
-        public void setAddress(String address) {
+        public void setAddress(double address) {
             this.address = address;
         }
 
@@ -73,7 +75,7 @@ public abstract class ContactInformation {
         }
 
 
-        public Mail withAddress(String address) {
+        public Mail withAddress(double address) {
             return new Mail(address, getRegion(), getCity(), getCountry(), getPostalCode());
         }
 
@@ -103,18 +105,19 @@ public abstract class ContactInformation {
             return "Mail(" + "address = " +  getAddress() + ", region = " +  getRegion() + ", city = " +  getCity() + ", country = " +  getCountry() + ", postalCode = " +  getPostalCode() + ")";
         }
 
+
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
             if (obj == null || getClass() != obj.getClass()) return false;
             Mail that = (Mail) obj;
-            return Objects.equals(getAddress(), that.getAddress()) && Objects.equals(getRegion(), that.getRegion()) && Objects.equals(getCity(), that.getCity()) && Objects.equals(getCountry(), that.getCountry()) && Objects.equals(getPostalCode(), that.getPostalCode());
+            return getAddress() == that.getAddress() && Objects.equals(getRegion(), that.getRegion()) && Objects.equals(getCity(), that.getCity()) && Objects.equals(getCountry(), that.getCountry()) && Objects.equals(getPostalCode(), that.getPostalCode());
         }
-
         @Override
         public int hashCode() {
             return Objects.hash(getAddress(), getRegion(), getCity(), getCountry(), getPostalCode());
         }
+
 
         public <$T> $T when(Switch<$T> cases) {
             return cases.is(this);
@@ -156,6 +159,7 @@ public abstract class ContactInformation {
             return "Email(" + "addr = " +  getAddr() + ")";
         }
 
+
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -163,11 +167,11 @@ public abstract class ContactInformation {
             Email that = (Email) obj;
             return Objects.equals(getAddr(), that.getAddr());
         }
-
         @Override
         public int hashCode() {
             return Objects.hash(getAddr());
         }
+
 
         public <$T> $T when(Switch<$T> cases) {
             return cases.is(this);
@@ -209,6 +213,7 @@ public abstract class ContactInformation {
             return "Phone(" + "number = " +  Arrays.toString(getNumber()) + ")";
         }
 
+
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -216,13 +221,13 @@ public abstract class ContactInformation {
             Phone that = (Phone) obj;
             return Arrays.equals(getNumber(), that.getNumber());
         }
-
         @Override
         public int hashCode() {
             int code = 0;
             code = 37 * code + Arrays.hashCode(getNumber());
             return code;
         }
+
 
         public <$T> $T when(Switch<$T> cases) {
             return cases.is(this);
@@ -233,7 +238,7 @@ public abstract class ContactInformation {
         private boolean callable;
 
         public Fax() {
-            this.callable = false && ( Boolean ) true || false && ( 34.0 > 60.0 );
+            this.callable = false && ( Boolean ) true || false && ( 34.0 > 60.0 && 5 > 4 <<  444 );
         }
 
         public Fax(boolean callable) {
@@ -264,6 +269,7 @@ public abstract class ContactInformation {
             return "Fax(" + "callable = " +  isCallable() + ")";
         }
 
+
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -271,11 +277,11 @@ public abstract class ContactInformation {
             Fax that = (Fax) obj;
             return isCallable() == that.isCallable();
         }
-
         @Override
         public int hashCode() {
             return Objects.hash(isCallable());
         }
+
 
         public <$T> $T when(Switch<$T> cases) {
             return cases.is(this);
@@ -289,7 +295,7 @@ public abstract class ContactInformation {
         $T is(Fax it);
     }
     public interface SwitchBuilder<$T> {
-        ContactInformation getValue();
+ContactInformation getValue();
         Function<Mail,$T> getOnMail();
         Function<Email,$T> getOnEmail();
         Function<Phone,$T> getOnPhone();
@@ -300,19 +306,24 @@ public abstract class ContactInformation {
             Function<Email,$T> onEmail = getOnEmail();
             Function<Phone,$T> onPhone = getOnPhone();
             Function<Fax,$T> onFax = getOnFax();
+
             return new Switch<$T>() {
                 public $T is(Mail it) {
                     return onMail.apply(it);
                 }
+
                 public $T is(Email it) {
                     return onEmail.apply(it);
                 }
+
                 public $T is(Phone it) {
                     return onPhone.apply(it);
                 }
+
                 public $T is(Fax it) {
                     return onFax.apply(it);
                 }
+
             };
         }
 
@@ -320,7 +331,7 @@ public abstract class ContactInformation {
             return getValue().when(build());
         }
     }
-    public static final class CaseSwitchBuilder<$T> implements SwitchBuilder<$T> {
+    public static final class CaseSwitchBuilder<$T> implements SwitchBuilder<$T>{
         private final ContactInformation value;
         private Function<Mail,$T> onMail;
         private Function<Email,$T> onEmail;
@@ -346,79 +357,91 @@ public abstract class ContactInformation {
             } else {
                 throw new NullPointerException();
             }
-        };
+        }
+
         public Function<Email,$T> getOnEmail() {
             if (onEmail != null) {
                 return onEmail;
             } else {
                 throw new NullPointerException();
             }
-        };
+        }
+
         public Function<Phone,$T> getOnPhone() {
             if (onPhone != null) {
                 return onPhone;
             } else {
                 throw new NullPointerException();
             }
-        };
+        }
+
         public Function<Fax,$T> getOnFax() {
             if (onFax != null) {
                 return onFax;
             } else {
                 throw new NullPointerException();
             }
-        };
+        }
 
         public CaseSwitchBuilder<$T> onMail(Function<Mail,$T> onMail) {
             this.onMail = onMail;
             return this;
-        };
+        }
+
         public CaseSwitchBuilder<$T> onEmail(Function<Email,$T> onEmail) {
             this.onEmail = onEmail;
             return this;
-        };
+        }
+
         public CaseSwitchBuilder<$T> onPhone(Function<Phone,$T> onPhone) {
             this.onPhone = onPhone;
             return this;
-        };
+        }
+
         public CaseSwitchBuilder<$T> onFax(Function<Fax,$T> onFax) {
             this.onFax = onFax;
             return this;
-        };
+        }
 
         public CaseSwitchBuilder<$T> onMail(Supplier<$T> onMail) {
-            this.onMail = it -> onMail.get();
+            this.onMail = it ->onMail.get();
             return this;
-        };
+        }
+
         public CaseSwitchBuilder<$T> onEmail(Supplier<$T> onEmail) {
-            this.onEmail = it -> onEmail.get();
+            this.onEmail = it ->onEmail.get();
             return this;
-        };
+        }
+
         public CaseSwitchBuilder<$T> onPhone(Supplier<$T> onPhone) {
-            this.onPhone = it -> onPhone.get();
+            this.onPhone = it ->onPhone.get();
             return this;
-        };
+        }
+
         public CaseSwitchBuilder<$T> onFax(Supplier<$T> onFax) {
-            this.onFax = it -> onFax.get();
+            this.onFax = it ->onFax.get();
             return this;
-        };
+        }
 
         public CaseSwitchBuilder<$T> onMail($T onMail) {
-            this.onMail = it -> onMail;
+            this.onMail= it -> onMail;
             return this;
-        };
+        }
+
         public CaseSwitchBuilder<$T> onEmail($T onEmail) {
-            this.onEmail = it -> onEmail;
+            this.onEmail= it -> onEmail;
             return this;
-        };
+        }
+
         public CaseSwitchBuilder<$T> onPhone($T onPhone) {
-            this.onPhone = it -> onPhone;
+            this.onPhone= it -> onPhone;
             return this;
-        };
+        }
+
         public CaseSwitchBuilder<$T> onFax($T onFax) {
-            this.onFax = it -> onFax;
+            this.onFax= it -> onFax;
             return this;
-        };
+        }
 
         public TerminalSwitchBuilder<$T> orElse(Supplier<$T> orElse) {
             return new TerminalSwitchBuilder<>(this, orElse);
@@ -431,6 +454,7 @@ public abstract class ContactInformation {
     public static final class TerminalSwitchBuilder<$T> implements SwitchBuilder<$T> {
         private final SwitchBuilder<$T> switchBuilder;
         private final Supplier<$T> orElse;
+
         TerminalSwitchBuilder(SwitchBuilder<$T> switchBuilder, Supplier<$T> orElse) {
             if (orElse == null) {
                 throw new NullPointerException();

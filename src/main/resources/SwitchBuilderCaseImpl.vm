@@ -1,57 +1,57 @@
-    public static final class CaseSwitchBuilder#if( !$tp.empty )<${d}T, $tp>#else<${d}T>#end implements SwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end {
-        private final $union.typeName#if( !$ta.empty )<$ta>#end value;
+    public static final class #genericTypeDeclaration("CaseSwitchBuilder" $gt) implements #genericTypeInstance("SwitchBuilder" $gt){
+        private final #typeInstance($union.typeName) value;
         #foreach( $product in $union.productTypes )
-        private Function<$product.typeName#if( !$ta.empty )<$ta>#end,$T> ${util.toSwitchSetterName($product)};
+        private Function<#typeInstance($product.typeName),$gt> #bSetterName($product);
         #end
 
-        CaseSwitchBuilder($union.typeName#if( !$ta.empty )<$ta>#end value) {
+        CaseSwitchBuilder(#typeInstance($union.typeName) value) {
             this.value = value;
             #foreach( $product in $union.productTypes )
-            this.${util.toSwitchSetterName($product)} = null;
+            this.#bSetterName($product) = null;
             #end
         }
 
         @Override
-        public $union.typeName#if( !$ta.empty )<$ta>#end getValue() {
+        public #typeInstance($union.typeName) getValue() {
             return value;
         }
 
         #foreach( $product in $union.productTypes )
-        public Function<$product.typeName#if( !$ta.empty )<$ta>#end,$T> ${util.toSwitchGetterName($product)}() {
-            if (${util.toSwitchSetterName($product)} != null) {
-                return ${util.toSwitchSetterName($product)};
+        public Function<#typeInstance($product.typeName),$gt> #bGetterName($product)() {
+            if (#bSetterName($product) != null) {
+                return #bSetterName($product);
             } else {
                 throw new NullPointerException();
             }
-        };
-        #end
+        }
 
+        #end
         #foreach( $product in $union.productTypes )
-        public CaseSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end ${util.toSwitchSetterName($product)}(Function<$product.typeName#if( !$ta.empty )<$ta>#end,$T> ${util.toSwitchSetterName($product)}) {
-            this.${util.toSwitchSetterName($product)} = ${util.toSwitchSetterName($product)};
+        public #genericTypeInstance("CaseSwitchBuilder" $gt) #bSetterName($product)(Function<#typeInstance($product.typeName),$gt> #bSetterName($product)) {
+            this.#bSetterName($product) = #bSetterName($product);
             return this;
-        };
-        #end
+        }
 
+        #end
         #foreach( $product in $union.productTypes )
-        public CaseSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end ${util.toSwitchSetterName($product)}(Supplier<$T> ${util.toSwitchSetterName($product)}) {
-            this.${util.toSwitchSetterName($product)} = it -> ${util.toSwitchSetterName($product)}.get();
+        public #genericTypeInstance("CaseSwitchBuilder" $gt) #bSetterName($product)(Supplier<$gt> #bSetterName($product)) {
+            this.#bSetterName($product) = it ->#bSetterName($product).get();
             return this;
-        };
-        #end
+        }
 
+        #end
         #foreach( $product in $union.productTypes )
-        public CaseSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end ${util.toSwitchSetterName($product)}(${d}T ${util.toSwitchSetterName($product)}) {
-            this.${util.toSwitchSetterName($product)} = it -> ${util.toSwitchSetterName($product)};
+        public #genericTypeInstance("CaseSwitchBuilder" $gt) #bSetterName($product)($gt #bSetterName($product)) {
+            this.#bSetterName($product)= it -> #bSetterName($product);
             return this;
-        };
-        #end
+        }
 
-        public TerminalSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end orElse(Supplier<${d}T> orElse) {
+        #end
+        public #genericTypeInstance("TerminalSwitchBuilder" $gt) orElse(Supplier<$gt> orElse) {
             return new TerminalSwitchBuilder<>(this, orElse);
         }
 
-        public TerminalSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end orElse(${d}T orElse) {
+        public #genericTypeInstance("TerminalSwitchBuilder" $gt) orElse($gt orElse) {
             return new TerminalSwitchBuilder<>(this, () -> orElse);
         }
     }

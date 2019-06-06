@@ -6,6 +6,6 @@
             if (this == obj) return true;
             if (obj == null || getClass() != obj.getClass()) return false;
             $product.typeName that = ($product.typeName) obj;
-            return#foreach($field in $product.fields)#if($foreach.index != 0) &&#end#if($field.type.kind.code == 0) ${util.toGetterName($field)}() == that.${util.toGetterName($field)}()#elseif($field.type.kind.code == 1) Objects.equals(${util.toGetterName($field)}(), that.${util.toGetterName($field)}())#else Arrays.equals(${util.toGetterName($field)}(), that.${util.toGetterName($field)}())#end#end;
+            return #@delimit( $product.fields " && ")#if($item.type.kind.code == 0)#getterName($item)() == that.#getterName($item)()#elseif($item.type.kind.code == 1)Objects.equals(#getterName($item)(), that.#getterName($item)())#{else}Arrays.equals(#getterName($item)(), that.#getterName($item)())#end#end;
             #end
         }

@@ -6,6 +6,7 @@ import io.kpatel.algbeans.entity.java.JavaField;
 import io.kpatel.algbeans.entity.java.JavaIdentifier;
 import io.kpatel.algbeans.entity.java.JavaImport;
 import io.kpatel.algbeans.entity.java.JavaPackage;
+import io.kpatel.algbeans.entity.java.type.JavaAnnotation;
 import io.kpatel.algbeans.entity.java.type.JavaType;
 import io.kpatel.algbeans.entity.java.type.JavaTypeParameter;
 import io.kpatel.algbeans.parser.AlgBeansBaseListener;
@@ -83,8 +84,7 @@ public class UnionListener extends AlgBeansBaseListener {
         if (ctx.annotation() != null) {
 
             for (AlgBeansParser.AnnotationContext annotationCtx : ctx.annotation()) {
-                AnnotationVisitor annotationVisitor = new AnnotationVisitor();
-                currentUnion.addAnnotation(annotationVisitor.visit(annotationCtx));
+                currentUnion.addAnnotation( new JavaAnnotation(ParseTreeUtil.toString(annotationCtx)));
             }
         }
     }
@@ -136,7 +136,7 @@ public class UnionListener extends AlgBeansBaseListener {
             }
         }
         if (ctx.fieldInit() != null) {
-            field.setInitializer(new ExpressionVisitor().toString(ctx.fieldInit()));
+            field.setInitializer(ParseTreeUtil.toString(ctx.fieldInit()));
         }
         currentProduct.addField(field);
     }

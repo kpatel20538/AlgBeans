@@ -1,3 +1,4 @@
+
 package com.example.union;
 
 import java.util.Objects;
@@ -28,18 +29,19 @@ public abstract class Either<U, V> {
 
 
         public Left<U, V> withItem(U item) {
-            return new Left(item);
+            return new Left<>(item);
         }
 
         @Override
         public Left<U, V> copy() {
-            return new Left(getItem());
+            return new Left<>(getItem());
         }
 
         @Override
         public String toString() {
             return "Left(" + "item = " +  getItem() + ")";
         }
+
 
         @Override
         public boolean equals(Object obj) {
@@ -48,11 +50,11 @@ public abstract class Either<U, V> {
             Left that = (Left) obj;
             return Objects.equals(getItem(), that.getItem());
         }
-
         @Override
         public int hashCode() {
             return Objects.hash(getItem());
         }
+
 
         public <$T> $T when(Switch<$T, U, V> cases) {
             return cases.is(this);
@@ -81,18 +83,19 @@ public abstract class Either<U, V> {
 
 
         public Right<U, V> withItem(V item) {
-            return new Right(item);
+            return new Right<>(item);
         }
 
         @Override
         public Right<U, V> copy() {
-            return new Right(getItem());
+            return new Right<>(getItem());
         }
 
         @Override
         public String toString() {
             return "Right(" + "item = " +  getItem() + ")";
         }
+
 
         @Override
         public boolean equals(Object obj) {
@@ -101,11 +104,11 @@ public abstract class Either<U, V> {
             Right that = (Right) obj;
             return Objects.equals(getItem(), that.getItem());
         }
-
         @Override
         public int hashCode() {
             return Objects.hash(getItem());
         }
+
 
         public <$T> $T when(Switch<$T, U, V> cases) {
             return cases.is(this);
@@ -117,20 +120,23 @@ public abstract class Either<U, V> {
         $T is(Right<U, V> it);
     }
     public interface SwitchBuilder<$T, U, V> {
-        Either<U, V> getValue();
+Either<U, V> getValue();
         Function<Left<U, V>,$T> getOnLeft();
         Function<Right<U, V>,$T> getOnRight();
 
         default Switch<$T, U, V> build() {
             Function<Left<U, V>,$T> onLeft = getOnLeft();
             Function<Right<U, V>,$T> onRight = getOnRight();
+
             return new Switch<$T, U, V>() {
                 public $T is(Left<U, V> it) {
                     return onLeft.apply(it);
                 }
+
                 public $T is(Right<U, V> it) {
                     return onRight.apply(it);
                 }
+
             };
         }
 
@@ -138,7 +144,7 @@ public abstract class Either<U, V> {
             return getValue().when(build());
         }
     }
-    public static final class CaseSwitchBuilder<$T, U, V> implements SwitchBuilder<$T, U, V> {
+    public static final class CaseSwitchBuilder<$T, U, V> implements SwitchBuilder<$T, U, V>{
         private final Either<U, V> value;
         private Function<Left<U, V>,$T> onLeft;
         private Function<Right<U, V>,$T> onRight;
@@ -160,41 +166,45 @@ public abstract class Either<U, V> {
             } else {
                 throw new NullPointerException();
             }
-        };
+        }
+
         public Function<Right<U, V>,$T> getOnRight() {
             if (onRight != null) {
                 return onRight;
             } else {
                 throw new NullPointerException();
             }
-        };
+        }
 
         public CaseSwitchBuilder<$T, U, V> onLeft(Function<Left<U, V>,$T> onLeft) {
             this.onLeft = onLeft;
             return this;
-        };
+        }
+
         public CaseSwitchBuilder<$T, U, V> onRight(Function<Right<U, V>,$T> onRight) {
             this.onRight = onRight;
             return this;
-        };
+        }
 
         public CaseSwitchBuilder<$T, U, V> onLeft(Supplier<$T> onLeft) {
-            this.onLeft = it -> onLeft.get();
+            this.onLeft = it ->onLeft.get();
             return this;
-        };
+        }
+
         public CaseSwitchBuilder<$T, U, V> onRight(Supplier<$T> onRight) {
-            this.onRight = it -> onRight.get();
+            this.onRight = it ->onRight.get();
             return this;
-        };
+        }
 
         public CaseSwitchBuilder<$T, U, V> onLeft($T onLeft) {
-            this.onLeft = it -> onLeft;
+            this.onLeft= it -> onLeft;
             return this;
-        };
+        }
+
         public CaseSwitchBuilder<$T, U, V> onRight($T onRight) {
-            this.onRight = it -> onRight;
+            this.onRight= it -> onRight;
             return this;
-        };
+        }
 
         public TerminalSwitchBuilder<$T, U, V> orElse(Supplier<$T> orElse) {
             return new TerminalSwitchBuilder<>(this, orElse);
@@ -207,6 +217,7 @@ public abstract class Either<U, V> {
     public static final class TerminalSwitchBuilder<$T, U, V> implements SwitchBuilder<$T, U, V> {
         private final SwitchBuilder<$T, U, V> switchBuilder;
         private final Supplier<$T> orElse;
+
         TerminalSwitchBuilder(SwitchBuilder<$T, U, V> switchBuilder, Supplier<$T> orElse) {
             if (orElse == null) {
                 throw new NullPointerException();

@@ -48,6 +48,7 @@ public class TypeVisitor extends AlgBeansBaseVisitor<JavaType> {
         for (AlgBeansParser.TypeDeclContext typeDeclContext: ctx.typeDecl()) {
             referenceType.addTypeDecls(toTypeDecl(typeDeclContext));
         }
+
         return referenceType;
     }
 

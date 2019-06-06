@@ -1,3 +1,4 @@
+#parse("Macros.vm")
 #if( $union.packageLine )
 package $union.packageLine.name;
 #end
@@ -10,13 +11,10 @@ import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-#set( $tp = $util.toTypeParameterCode($union.typeParameters) )
-#set( $ta = $util.toTypeArgumentsCode($union.typeParameters) )
-#set( $d = "$" )
 #foreach( $annotation in $union.annotations )
-@${annotation.type}#if( !$annotation.elements.empty )(${annotation.elements})#end
+$annotation
 #end
-public abstract class $union.typeName#if( !$tp.empty )<$tp>#end {
+public abstract class #typeDeclaration($union.typeName) {
     #foreach( $product in $union.productTypes )
     #parse("ProductTemplate.vm")
 
@@ -31,11 +29,11 @@ public abstract class $union.typeName#if( !$tp.empty )<$tp>#end {
 
     ${union.typeName}() { }
 
-    public abstract ${union.typeName}#if( !$ta.empty )<$ta>#end copy();
+    public abstract #typeInstance($union.typeName) copy();
 
-    public abstract <${d}T> ${d}T when(Switch#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end cases);
+    public abstract <$gt> $gt when(#genericTypeInstance("Switch" $gt) cases);
 
-    public <${d}T> CaseSwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end switchBuilder() {
+    public <$gt> #genericTypeInstance("CaseSwitchBuilder" $gt) switchBuilder() {
         return new CaseSwitchBuilder<>(this);
     }
 }

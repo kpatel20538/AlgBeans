@@ -1,3 +1,4 @@
+
 package com.example.union;
 
 import java.util.Objects;
@@ -5,6 +6,7 @@ import java.util.Arrays;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+@ Deprecated
 public abstract class Optional<T> {
     public final static class Exists<T> extends Optional<T> {
         private T item;
@@ -28,18 +30,19 @@ public abstract class Optional<T> {
 
 
         public Exists<T> withItem(T item) {
-            return new Exists(item);
+            return new Exists<>(item);
         }
 
         @Override
         public Exists<T> copy() {
-            return new Exists(getItem());
+            return new Exists<>(getItem());
         }
 
         @Override
         public String toString() {
             return "Exists(" + "item = " +  getItem() + ")";
         }
+
 
         @Override
         public boolean equals(Object obj) {
@@ -48,11 +51,11 @@ public abstract class Optional<T> {
             Exists that = (Exists) obj;
             return Objects.equals(getItem(), that.getItem());
         }
-
         @Override
         public int hashCode() {
             return Objects.hash(getItem());
         }
+
 
         public <$T> $T when(Switch<$T, T> cases) {
             return cases.is(this);
@@ -66,7 +69,7 @@ public abstract class Optional<T> {
 
         @Override
         public NoExists<T> copy() {
-            return new NoExists();
+            return new NoExists<>();
         }
 
         @Override
@@ -74,15 +77,16 @@ public abstract class Optional<T> {
             return "NoExists()";
         }
 
+
         @Override
         public boolean equals(Object obj) {
             return obj != null && getClass() == obj.getClass();
         }
-
         @Override
         public int hashCode() {
             return 0;
         }
+
 
         public <$T> $T when(Switch<$T, T> cases) {
             return cases.is(this);
@@ -94,20 +98,23 @@ public abstract class Optional<T> {
         $T is(NoExists<T> it);
     }
     public interface SwitchBuilder<$T, T> {
-        Optional<T> getValue();
+Optional<T> getValue();
         Function<Exists<T>,$T> getOnExists();
         Function<NoExists<T>,$T> getOnNoExists();
 
         default Switch<$T, T> build() {
             Function<Exists<T>,$T> onExists = getOnExists();
             Function<NoExists<T>,$T> onNoExists = getOnNoExists();
+
             return new Switch<$T, T>() {
                 public $T is(Exists<T> it) {
                     return onExists.apply(it);
                 }
+
                 public $T is(NoExists<T> it) {
                     return onNoExists.apply(it);
                 }
+
             };
         }
 
@@ -115,7 +122,7 @@ public abstract class Optional<T> {
             return getValue().when(build());
         }
     }
-    public static final class CaseSwitchBuilder<$T, T> implements SwitchBuilder<$T, T> {
+    public static final class CaseSwitchBuilder<$T, T> implements SwitchBuilder<$T, T>{
         private final Optional<T> value;
         private Function<Exists<T>,$T> onExists;
         private Function<NoExists<T>,$T> onNoExists;
@@ -137,41 +144,45 @@ public abstract class Optional<T> {
             } else {
                 throw new NullPointerException();
             }
-        };
+        }
+
         public Function<NoExists<T>,$T> getOnNoExists() {
             if (onNoExists != null) {
                 return onNoExists;
             } else {
                 throw new NullPointerException();
             }
-        };
+        }
 
         public CaseSwitchBuilder<$T, T> onExists(Function<Exists<T>,$T> onExists) {
             this.onExists = onExists;
             return this;
-        };
+        }
+
         public CaseSwitchBuilder<$T, T> onNoExists(Function<NoExists<T>,$T> onNoExists) {
             this.onNoExists = onNoExists;
             return this;
-        };
+        }
 
         public CaseSwitchBuilder<$T, T> onExists(Supplier<$T> onExists) {
-            this.onExists = it -> onExists.get();
+            this.onExists = it ->onExists.get();
             return this;
-        };
+        }
+
         public CaseSwitchBuilder<$T, T> onNoExists(Supplier<$T> onNoExists) {
-            this.onNoExists = it -> onNoExists.get();
+            this.onNoExists = it ->onNoExists.get();
             return this;
-        };
+        }
 
         public CaseSwitchBuilder<$T, T> onExists($T onExists) {
-            this.onExists = it -> onExists;
+            this.onExists= it -> onExists;
             return this;
-        };
+        }
+
         public CaseSwitchBuilder<$T, T> onNoExists($T onNoExists) {
-            this.onNoExists = it -> onNoExists;
+            this.onNoExists= it -> onNoExists;
             return this;
-        };
+        }
 
         public TerminalSwitchBuilder<$T, T> orElse(Supplier<$T> orElse) {
             return new TerminalSwitchBuilder<>(this, orElse);
@@ -184,6 +195,7 @@ public abstract class Optional<T> {
     public static final class TerminalSwitchBuilder<$T, T> implements SwitchBuilder<$T, T> {
         private final SwitchBuilder<$T, T> switchBuilder;
         private final Supplier<$T> orElse;
+
         TerminalSwitchBuilder(SwitchBuilder<$T, T> switchBuilder, Supplier<$T> orElse) {
             if (orElse == null) {
                 throw new NullPointerException();

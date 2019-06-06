@@ -6,33 +6,27 @@ import java.util.Objects;
  * POJO representing a Java Annotation
  */
 public class JavaAnnotation {
-    private JavaType type;
-    private String elements;
+    private String content;
 
-    public JavaAnnotation(JavaType type) {
-        this.type = Objects.requireNonNull(type);
-        this.elements = "";
+    public JavaAnnotation(String content) {
+        this.content = content;
     }
 
-    public JavaAnnotation(JavaType type, String elements) {
-        this.type = Objects.requireNonNull(type);
-        this.elements = Objects.requireNonNull(elements);
+    public JavaAnnotation() {
+        this.content = "";
     }
 
-    public JavaType getType() {
-        return type;
+    public String getContent() {
+        return content;
     }
 
-    public void setType(JavaType type) {
-        this.type = Objects.requireNonNull(type);
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public String getElements() {
-        return elements;
-    }
-
-    public void setElements(String elements) {
-        this.elements = Objects.requireNonNull(elements);
+    @Override
+    public String toString() {
+        return getContent();
     }
 
     @Override
@@ -40,12 +34,13 @@ public class JavaAnnotation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         JavaAnnotation that = (JavaAnnotation) o;
-        return getType().equals(that.getType()) &&
-                getElements().equals(that.getElements());
+        return getContent().equals(that.getContent());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getType(), getElements());
+        return Objects.hash(getContent());
     }
+
+
 }

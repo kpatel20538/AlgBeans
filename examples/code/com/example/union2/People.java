@@ -1,7 +1,9 @@
+
 package com.example.union2;
 
 import java.time.LocalDate;
 import java.util.Locale;
+import java.util.function.DoubleFunction;
 import java.util.Objects;
 import java.util.Arrays;
 import java.util.function.Function;
@@ -88,6 +90,7 @@ public abstract class People {
             return "Person(" + "name = " +  getName() + ", birthday = " +  getBirthday() + ", prefLocale = " +  getPrefLocale() + ", contactMethod = " +  getContactMethod() + ")";
         }
 
+
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -95,11 +98,11 @@ public abstract class People {
             Person that = (Person) obj;
             return Objects.equals(getName(), that.getName()) && Objects.equals(getBirthday(), that.getBirthday()) && Objects.equals(getPrefLocale(), that.getPrefLocale()) && Objects.equals(getContactMethod(), that.getContactMethod());
         }
-
         @Override
         public int hashCode() {
             return Objects.hash(getName(), getBirthday(), getPrefLocale(), getContactMethod());
         }
+
 
         public <$T> $T when(Switch<$T> cases) {
             return cases.is(this);
@@ -110,15 +113,17 @@ public abstract class People {
         $T is(Person it);
     }
     public interface SwitchBuilder<$T> {
-        People getValue();
+People getValue();
         Function<Person,$T> getOnPerson();
 
         default Switch<$T> build() {
             Function<Person,$T> onPerson = getOnPerson();
+
             return new Switch<$T>() {
                 public $T is(Person it) {
                     return onPerson.apply(it);
                 }
+
             };
         }
 
@@ -126,7 +131,7 @@ public abstract class People {
             return getValue().when(build());
         }
     }
-    public static final class CaseSwitchBuilder<$T> implements SwitchBuilder<$T> {
+    public static final class CaseSwitchBuilder<$T> implements SwitchBuilder<$T>{
         private final People value;
         private Function<Person,$T> onPerson;
 
@@ -146,22 +151,22 @@ public abstract class People {
             } else {
                 throw new NullPointerException();
             }
-        };
+        }
 
         public CaseSwitchBuilder<$T> onPerson(Function<Person,$T> onPerson) {
             this.onPerson = onPerson;
             return this;
-        };
+        }
 
         public CaseSwitchBuilder<$T> onPerson(Supplier<$T> onPerson) {
-            this.onPerson = it -> onPerson.get();
+            this.onPerson = it ->onPerson.get();
             return this;
-        };
+        }
 
         public CaseSwitchBuilder<$T> onPerson($T onPerson) {
-            this.onPerson = it -> onPerson;
+            this.onPerson= it -> onPerson;
             return this;
-        };
+        }
 
         public TerminalSwitchBuilder<$T> orElse(Supplier<$T> orElse) {
             return new TerminalSwitchBuilder<>(this, orElse);
@@ -174,6 +179,7 @@ public abstract class People {
     public static final class TerminalSwitchBuilder<$T> implements SwitchBuilder<$T> {
         private final SwitchBuilder<$T> switchBuilder;
         private final Supplier<$T> orElse;
+
         TerminalSwitchBuilder(SwitchBuilder<$T> switchBuilder, Supplier<$T> orElse) {
             if (orElse == null) {
                 throw new NullPointerException();

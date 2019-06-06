@@ -1,7 +1,8 @@
-    public static final class TerminalSwitchBuilder#if( !$tp.empty )<${d}T, $tp>#else<${d}T>#end implements SwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end {
-        private final SwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end switchBuilder;
-        private final Supplier<$T> orElse;
-        TerminalSwitchBuilder(SwitchBuilder#if( !$ta.empty )<${d}T, $ta>#else<${d}T>#end switchBuilder, Supplier<$T> orElse) {
+    public static final class #genericTypeDeclaration("TerminalSwitchBuilder" $gt) implements #genericTypeInstance("SwitchBuilder" $gt) {
+        private final #genericTypeInstance("SwitchBuilder" $gt) switchBuilder;
+        private final Supplier<$gt> orElse;
+
+        TerminalSwitchBuilder(#genericTypeInstance("SwitchBuilder" $gt) switchBuilder, Supplier<$gt> orElse) {
             if (orElse == null) {
                 throw new NullPointerException();
             }
@@ -9,19 +10,19 @@
             this.orElse = orElse;
         }
 
-        private <$R> Function<$R, $T> ensureFunction(Function<$R, $T> func) {
+        private <$gr> Function<$gr, $gt> ensureFunction(Function<$gr, $gt> func) {
             return func != null ? func : it -> orElse.get();
         }
 
         @Override
-        public $union.typeName#if( !$ta.empty )<$ta>#end getValue() {
+        public #typeInstance($union.typeName) getValue() {
             return switchBuilder.getValue();
         }
 
         #foreach( $product in $union.productTypes )
         @Override
-        public Function<$product.typeName#if( !$ta.empty )<$ta>#end, $T> ${util.toSwitchGetterName($product)}() {
-            return ensureFunction(switchBuilder.${util.toSwitchGetterName($product)}());
+        public Function<#typeInstance($product.typeName), $T> #bGetterName($product)() {
+            return ensureFunction(switchBuilder.#bGetterName($product)());
         }
 
         #end

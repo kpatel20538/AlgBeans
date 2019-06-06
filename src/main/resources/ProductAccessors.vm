@@ -1,5 +1,5 @@
         #foreach( $field in $product.fields )
-        public#if( $field.synchronized ) synchronized#end $field.type ${util.toGetterName($field)}() {
+        public #synchronized($field)$field.type #getterName($field)() {
             return $field.name;
         }
 
