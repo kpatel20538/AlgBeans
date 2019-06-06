@@ -21,7 +21,6 @@ public abstract class LinkedList<T extends Comparable<T> & Cloneable> {
             this.item = item;
             this.next = next;
         }
-
         public T getItem() {
             return item;
         }
@@ -30,7 +29,6 @@ public abstract class LinkedList<T extends Comparable<T> & Cloneable> {
             return next;
         }
 
-
         public void setItem(T item) {
             this.item = item;
         }
@@ -38,7 +36,6 @@ public abstract class LinkedList<T extends Comparable<T> & Cloneable> {
         public synchronized void setNext(LinkedList<T> next) {
             this.next = next;
         }
-
 
         public UNode<T> withItem(T item) {
             return new UNode<>(item, getNext());
@@ -58,7 +55,6 @@ public abstract class LinkedList<T extends Comparable<T> & Cloneable> {
             return "UNode(" + "item = " +  getItem() + ", next = " +  getNext() + ")";
         }
 
-
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -66,11 +62,11 @@ public abstract class LinkedList<T extends Comparable<T> & Cloneable> {
             UNode that = (UNode) obj;
             return Objects.equals(getItem(), that.getItem()) && Objects.equals(getNext(), that.getNext());
         }
+
         @Override
         public int hashCode() {
             return Objects.hash(getItem(), getNext());
         }
-
 
         public <$T> $T when(Switch<$T, T> cases) {
             return cases.is(this);
@@ -78,9 +74,6 @@ public abstract class LinkedList<T extends Comparable<T> & Cloneable> {
 
     }
     public final static class EmptyUNode<T extends Comparable<T> & Cloneable> extends LinkedList<T> {
-
-
-
 
         @Override
         public EmptyUNode<T> copy() {
@@ -92,16 +85,15 @@ public abstract class LinkedList<T extends Comparable<T> & Cloneable> {
             return "EmptyUNode()";
         }
 
-
         @Override
         public boolean equals(Object obj) {
             return obj != null && getClass() == obj.getClass();
         }
+
         @Override
         public int hashCode() {
             return 0;
         }
-
 
         public <$T> $T when(Switch<$T, T> cases) {
             return cases.is(this);

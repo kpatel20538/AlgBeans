@@ -18,16 +18,13 @@ public abstract class Optional<T> {
         public Exists(T item) {
             this.item = item;
         }
-
         public T getItem() {
             return item;
         }
 
-
         public void setItem(T item) {
             this.item = item;
         }
-
 
         public Exists<T> withItem(T item) {
             return new Exists<>(item);
@@ -43,7 +40,6 @@ public abstract class Optional<T> {
             return "Exists(" + "item = " +  getItem() + ")";
         }
 
-
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -51,11 +47,11 @@ public abstract class Optional<T> {
             Exists that = (Exists) obj;
             return Objects.equals(getItem(), that.getItem());
         }
+
         @Override
         public int hashCode() {
             return Objects.hash(getItem());
         }
-
 
         public <$T> $T when(Switch<$T, T> cases) {
             return cases.is(this);
@@ -63,9 +59,6 @@ public abstract class Optional<T> {
 
     }
     public final static class NoExists<T> extends Optional<T> {
-
-
-
 
         @Override
         public NoExists<T> copy() {
@@ -77,16 +70,15 @@ public abstract class Optional<T> {
             return "NoExists()";
         }
 
-
         @Override
         public boolean equals(Object obj) {
             return obj != null && getClass() == obj.getClass();
         }
+
         @Override
         public int hashCode() {
             return 0;
         }
-
 
         public <$T> $T when(Switch<$T, T> cases) {
             return cases.is(this);

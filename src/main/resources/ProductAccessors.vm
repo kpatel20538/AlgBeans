@@ -1,6 +1,0 @@
-        #foreach( $field in $product.fields )
-        public #synchronized($field)$field.type #getterName($field)() {
-            return $field.name;
-        }
-
-        #end

@@ -1,6 +1,4 @@
-
-#set( $gt = "$T" )
-#set( $gr = "$R" )
+#set( $gt = "$T" )#set( $gr = "$R" )
 #macro( drop $jId $cut )$jId.id.substring($cut)#end
 #macro( delimit $list $delimiter )#foreach($item in $list)#if($foreach.index != 0)$delimiter#end$!bodyContent#end#end
 #macro( capitalize $jId )

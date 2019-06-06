@@ -23,7 +23,6 @@ public abstract class BinaryTree<T> {
             this.left = left;
             this.right = right;
         }
-
         public T getItem() {
             return item;
         }
@@ -36,7 +35,6 @@ public abstract class BinaryTree<T> {
             return right;
         }
 
-
         public void setItem(T item) {
             this.item = item;
         }
@@ -48,7 +46,6 @@ public abstract class BinaryTree<T> {
         public void setRight(BinaryTree<T> right) {
             this.right = right;
         }
-
 
         public BNode<T> withItem(T item) {
             return new BNode<>(item, getLeft(), getRight());
@@ -72,7 +69,6 @@ public abstract class BinaryTree<T> {
             return "BNode(" + "item = " +  getItem() + ", left = " +  getLeft() + ", right = " +  getRight() + ")";
         }
 
-
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -80,11 +76,11 @@ public abstract class BinaryTree<T> {
             BNode that = (BNode) obj;
             return Objects.equals(getItem(), that.getItem()) && Objects.equals(getLeft(), that.getLeft()) && Objects.equals(getRight(), that.getRight());
         }
+
         @Override
         public int hashCode() {
             return Objects.hash(getItem(), getLeft(), getRight());
         }
-
 
         public <$T> $T when(Switch<$T, T> cases) {
             return cases.is(this);
@@ -92,9 +88,6 @@ public abstract class BinaryTree<T> {
 
     }
     public final static class EmptyBNode<T> extends BinaryTree<T> {
-
-
-
 
         @Override
         public EmptyBNode<T> copy() {
@@ -106,16 +99,15 @@ public abstract class BinaryTree<T> {
             return "EmptyBNode()";
         }
 
-
         @Override
         public boolean equals(Object obj) {
             return obj != null && getClass() == obj.getClass();
         }
+
         @Override
         public int hashCode() {
             return 0;
         }
-
 
         public <$T> $T when(Switch<$T, T> cases) {
             return cases.is(this);

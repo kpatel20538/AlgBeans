@@ -29,7 +29,6 @@ public abstract class People {
             this.prefLocale = prefLocale;
             this.contactMethod = contactMethod;
         }
-
         public String getName() {
             return name;
         }
@@ -46,7 +45,6 @@ public abstract class People {
             return contactMethod;
         }
 
-
         public void setName(String name) {
             this.name = name;
         }
@@ -62,7 +60,6 @@ public abstract class People {
         public void setContactMethod(Contact contactMethod) {
             this.contactMethod = contactMethod;
         }
-
 
         public Person withName(String name) {
             return new Person(name, getBirthday(), getPrefLocale(), getContactMethod());
@@ -90,7 +87,6 @@ public abstract class People {
             return "Person(" + "name = " +  getName() + ", birthday = " +  getBirthday() + ", prefLocale = " +  getPrefLocale() + ", contactMethod = " +  getContactMethod() + ")";
         }
 
-
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -98,11 +94,11 @@ public abstract class People {
             Person that = (Person) obj;
             return Objects.equals(getName(), that.getName()) && Objects.equals(getBirthday(), that.getBirthday()) && Objects.equals(getPrefLocale(), that.getPrefLocale()) && Objects.equals(getContactMethod(), that.getContactMethod());
         }
+
         @Override
         public int hashCode() {
             return Objects.hash(getName(), getBirthday(), getPrefLocale(), getContactMethod());
         }
-
 
         public <$T> $T when(Switch<$T> cases) {
             return cases.is(this);

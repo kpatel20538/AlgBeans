@@ -32,7 +32,6 @@ public abstract class ContactInformation {
             this.country = country;
             this.postalCode = postalCode;
         }
-
         public double getAddress() {
             return address;
         }
@@ -53,7 +52,6 @@ public abstract class ContactInformation {
             return postalCode;
         }
 
-
         public void setAddress(double address) {
             this.address = address;
         }
@@ -73,7 +71,6 @@ public abstract class ContactInformation {
         public void setPostalCode(String postalCode) {
             this.postalCode = postalCode;
         }
-
 
         public Mail withAddress(double address) {
             return new Mail(address, getRegion(), getCity(), getCountry(), getPostalCode());
@@ -105,7 +102,6 @@ public abstract class ContactInformation {
             return "Mail(" + "address = " +  getAddress() + ", region = " +  getRegion() + ", city = " +  getCity() + ", country = " +  getCountry() + ", postalCode = " +  getPostalCode() + ")";
         }
 
-
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -113,11 +109,11 @@ public abstract class ContactInformation {
             Mail that = (Mail) obj;
             return getAddress() == that.getAddress() && Objects.equals(getRegion(), that.getRegion()) && Objects.equals(getCity(), that.getCity()) && Objects.equals(getCountry(), that.getCountry()) && Objects.equals(getPostalCode(), that.getPostalCode());
         }
+
         @Override
         public int hashCode() {
             return Objects.hash(getAddress(), getRegion(), getCity(), getCountry(), getPostalCode());
         }
-
 
         public <$T> $T when(Switch<$T> cases) {
             return cases.is(this);
@@ -134,16 +130,13 @@ public abstract class ContactInformation {
         public Email(String addr) {
             this.addr = addr;
         }
-
         public String getAddr() {
             return addr;
         }
 
-
         public void setAddr(String addr) {
             this.addr = addr;
         }
-
 
         public Email withAddr(String addr) {
             return new Email(addr);
@@ -159,7 +152,6 @@ public abstract class ContactInformation {
             return "Email(" + "addr = " +  getAddr() + ")";
         }
 
-
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -167,11 +159,11 @@ public abstract class ContactInformation {
             Email that = (Email) obj;
             return Objects.equals(getAddr(), that.getAddr());
         }
+
         @Override
         public int hashCode() {
             return Objects.hash(getAddr());
         }
-
 
         public <$T> $T when(Switch<$T> cases) {
             return cases.is(this);
@@ -188,16 +180,13 @@ public abstract class ContactInformation {
         public Phone(int[] number) {
             this.number = number;
         }
-
         public int[] getNumber() {
             return number;
         }
 
-
         public void setNumber(int[] number) {
             this.number = number;
         }
-
 
         public Phone withNumber(int[] number) {
             return new Phone(number);
@@ -213,7 +202,6 @@ public abstract class ContactInformation {
             return "Phone(" + "number = " +  Arrays.toString(getNumber()) + ")";
         }
 
-
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -221,13 +209,13 @@ public abstract class ContactInformation {
             Phone that = (Phone) obj;
             return Arrays.equals(getNumber(), that.getNumber());
         }
+
         @Override
         public int hashCode() {
             int code = 0;
             code = 37 * code + Arrays.hashCode(getNumber());
             return code;
         }
-
 
         public <$T> $T when(Switch<$T> cases) {
             return cases.is(this);
@@ -244,16 +232,13 @@ public abstract class ContactInformation {
         public Fax(boolean callable) {
             this.callable = callable;
         }
-
         public boolean isCallable() {
             return callable;
         }
 
-
         public void setCallable(boolean callable) {
             this.callable = callable;
         }
-
 
         public Fax withCallable(boolean callable) {
             return new Fax(callable);
@@ -269,7 +254,6 @@ public abstract class ContactInformation {
             return "Fax(" + "callable = " +  isCallable() + ")";
         }
 
-
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -277,11 +261,11 @@ public abstract class ContactInformation {
             Fax that = (Fax) obj;
             return isCallable() == that.isCallable();
         }
+
         @Override
         public int hashCode() {
             return Objects.hash(isCallable());
         }
-
 
         public <$T> $T when(Switch<$T> cases) {
             return cases.is(this);

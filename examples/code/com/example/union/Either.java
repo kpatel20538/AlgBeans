@@ -17,16 +17,13 @@ public abstract class Either<U, V> {
         public Left(U item) {
             this.item = item;
         }
-
         public U getItem() {
             return item;
         }
 
-
         public void setItem(U item) {
             this.item = item;
         }
-
 
         public Left<U, V> withItem(U item) {
             return new Left<>(item);
@@ -42,7 +39,6 @@ public abstract class Either<U, V> {
             return "Left(" + "item = " +  getItem() + ")";
         }
 
-
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -50,11 +46,11 @@ public abstract class Either<U, V> {
             Left that = (Left) obj;
             return Objects.equals(getItem(), that.getItem());
         }
+
         @Override
         public int hashCode() {
             return Objects.hash(getItem());
         }
-
 
         public <$T> $T when(Switch<$T, U, V> cases) {
             return cases.is(this);
@@ -71,16 +67,13 @@ public abstract class Either<U, V> {
         public Right(V item) {
             this.item = item;
         }
-
         public V getItem() {
             return item;
         }
 
-
         public void setItem(V item) {
             this.item = item;
         }
-
 
         public Right<U, V> withItem(V item) {
             return new Right<>(item);
@@ -96,7 +89,6 @@ public abstract class Either<U, V> {
             return "Right(" + "item = " +  getItem() + ")";
         }
 
-
         @Override
         public boolean equals(Object obj) {
             if (this == obj) return true;
@@ -104,11 +96,11 @@ public abstract class Either<U, V> {
             Right that = (Right) obj;
             return Objects.equals(getItem(), that.getItem());
         }
+
         @Override
         public int hashCode() {
             return Objects.hash(getItem());
         }
-
 
         public <$T> $T when(Switch<$T, U, V> cases) {
             return cases.is(this);

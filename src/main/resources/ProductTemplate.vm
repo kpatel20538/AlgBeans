@@ -1,19 +1,85 @@
     public final static class #typeDeclaration($product.typeName) extends #typeInstance($union.typeName) {
-        #parse("ProductFields.vm")
+        #foreach( $field in $product.fields )
+        private#if( $field.final ) final#end#if( $field.transient ) transient#end#if( $field.volatile ) volatile#end $field.type $field.name;
+        #end
 
-        #parse("ProductConstructor.vm")
+        #if(!$product.fields.empty)
+        public ${product.typeName}() {
+            #foreach($field in $product.fields)
+            this.$field.name = $field.initializer;
+            #end
+        }
 
-        #parse("ProductAccessors.vm")
+        public ${product.typeName}(#@delimit( $product.fields ", ")$item.type $item.name#end) {
+            #foreach($field in $product.fields)
+            this.$field.name = $field.name;
+            #end
+        }
+        #end
+        #foreach( $field in $product.fields )
+        public #synchronized($field)$field.type #getterName($field)() {
+            return $field.name;
+        }
 
-        #parse("ProductMutators.vm")
+        #end
+        #foreach( $field in $product.fields )
+        #if( !$field.final )
+        public #synchronized($field)void #setterName($field)($field.type $field.name) {
+            this.$field.name = $field.name;
+        }
 
-        #parse("ProductCopiers.vm")
+        #end
+        #end
+        #foreach( $field in $product.fields )
+        public #typeInstance($product.typeName) #witherName($field)($field.type $field.name) {
+            return #constructorCall($product.typeName)(#@delimit( $product.fields ", ")#if(!$item.equals($field))#getterName($item)()#else${item.name}#end#end);
+        }
 
-        #parse("ProductToString.vm")
+        #end
+        @Override
+        public #typeInstance($product.typeName) copy() {
+            return #constructorCall($product.typeName)(#@delimit( $product.fields ", ")#getterName($item)()#end);
+        }
 
-        #parse("ProductEquals.vm")
+        @Override
+        public String toString() {
+            #if( $product.fields.empty )
+            return "${product.typeName}()";
+            #else
+            return "${product.typeName}(" + #foreach( $field in $product.fields )#if( $foreach.index > 0)", $field.name = " + #else"$field.name = " + #end#if( $field.type.kind.code != 2) #getterName($field)() + #else Arrays.toString(#getterName($field)()) + #end#end")";
+            #end
+        }
 
-        #parse("ProductHashCode.vm")
+        @Override
+        public boolean equals(Object obj) {
+            #if( $product.fields.empty )
+            return obj != null && getClass() == obj.getClass();
+            #else
+            if (this == obj) return true;
+            if (obj == null || getClass() != obj.getClass()) return false;
+            $product.typeName that = ($product.typeName) obj;
+            return #@delimit( $product.fields " && ")#if($item.type.kind.code == 0)#getterName($item)() == that.#getterName($item)()#elseif($item.type.kind.code == 1)Objects.equals(#getterName($item)(), that.#getterName($item)())#{else}Arrays.equals(#getterName($item)(), that.#getterName($item)())#end#end;
+            #end
+        }
+
+        @Override
+        public int hashCode() {
+            #if( $product.fields.empty )
+            return 0;
+            #elseif ( $util.byKind($product.fields, 2).empty )
+            return Objects.hash(#@delimit( $product.fields ", ")#getterName($item)()#end);
+            #else
+            #if ( $util.byNotKind($product.fields, 2).empty )
+            int code = 0;
+            #else
+            int code = Objects.hash(#@delimit( $util.byNotKind($product.fields, 2) ", ")#getterName($item)()#end);
+            #end
+            #foreach( $field in $util.byKind($product.fields, 2) )
+            code = 37 * code + Arrays.hashCode(#getterName($field)());
+            #end
+            return code;
+            #end
+        }
 
         public <$gt> $gt when(#genericTypeInstance("Switch" $gt) cases) {
             return cases.is(this);
