@@ -2,10 +2,12 @@ plugins {
     id 'java'
     id 'antlr'
     id 'idea'
+    id 'application'
 }
 
 group 'io.kpatel.algbeans'
 version '1.0-SNAPSHOT'
+mainClassName = 'io.kpatel.algbeans.cli.CliMain'
 
 sourceCompatibility = 1.8
 
@@ -25,6 +27,13 @@ dependencies {
     antlr group: 'org.antlr', name: 'antlr4', version: '4.7.2'
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': 'io.kpatel.algbeans.cli.CliMain'
+    }
+}
+
 generateGrammarSource {
     arguments += ['-visitor']
 }
+

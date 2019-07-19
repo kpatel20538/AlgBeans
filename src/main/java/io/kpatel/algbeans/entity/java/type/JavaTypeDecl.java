@@ -1,9 +1,10 @@
 package io.kpatel.algbeans.entity.java.type;
 
 import io.kpatel.algbeans.entity.java.JavaIdentifier;
-import io.kpatel.algbeans.util.JavaUtil;
+import io.kpatel.algbeans.util.StreamUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *  A Pseudo-POJO representing an Type Declaration which can been one of the following
@@ -16,7 +17,7 @@ import java.util.*;
  *
  * @see JavaReferenceType
  *
- *  JavaTypeDecl.toString() is implemented for the benefit JavaReferenceType.toString() in JavaUtil.toDelimitedList
+ *  JavaTypeDecl.toString() is implemented for the benefit JavaReferenceType.toString() in VelocityHelper.toDelimitedList
  */
 public class JavaTypeDecl {
     private JavaIdentifier typeName;
@@ -53,7 +54,9 @@ public class JavaTypeDecl {
         if (getTypeArguments().isEmpty()) {
             return getTypeName().getId();
         } else {
-            return String.format("%s<%s>", getTypeName(), new JavaUtil().toDelimitedList(getTypeArguments(), ", "));
+            String codeTypeArgs = StreamUtils.strings(getTypeArguments())
+                    .collect(Collectors.joining(", "));
+            return String.format("%s<%s>", getTypeName(), codeTypeArgs);
         }
     }
 

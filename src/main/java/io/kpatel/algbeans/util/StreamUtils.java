@@ -1,6 +1,7 @@
 package io.kpatel.algbeans.util;
 
 import java.util.ArrayDeque;
+import java.util.Collection;
 import java.util.function.Function;
 import java.util.function.IntFunction;
 import java.util.function.IntSupplier;
@@ -36,5 +37,9 @@ public class StreamUtils {
 
     public static <E> Stream<E> iterable(Iterable<E> iterable) {
         return StreamSupport.stream(iterable.spliterator(), false);
+    }
+
+    public static <E> Stream<String> strings(Collection<E> collection) {
+        return collection.stream().map(E::toString);
     }
 }

@@ -1,8 +1,10 @@
 package io.kpatel.algbeans.entity.java.type;
 
-import io.kpatel.algbeans.util.JavaUtil;
+import io.kpatel.algbeans.util.StreamUtils;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
 
 /**
  *  A Pseudo-POJOs representing each Reference Type.
@@ -31,7 +33,7 @@ public class JavaReferenceType implements JavaType{
 
     @Override
     public String toString() {
-        return new JavaUtil().toDelimitedList(getTypeDecls(), ".");
+        return StreamUtils.strings(getTypeDecls()).collect(Collectors.joining("."));
     }
 
     @Override

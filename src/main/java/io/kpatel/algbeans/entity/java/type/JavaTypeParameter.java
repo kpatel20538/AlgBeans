@@ -1,9 +1,11 @@
 package io.kpatel.algbeans.entity.java.type;
 
 import io.kpatel.algbeans.entity.java.JavaIdentifier;
-import io.kpatel.algbeans.util.JavaUtil;
 
 import java.util.*;
+import java.util.stream.Collectors;
+
+import io.kpatel.algbeans.util.StreamUtils;
 
 /**
  *  A Pseudo-POJO representing an Type Parameter, which a pairing of a list of bounds and parameter name.
@@ -50,10 +52,12 @@ public class JavaTypeParameter {
 
     @Override
     public String toString() {
-        if(bounds.isEmpty()) {
+        if(getBounds().isEmpty()) {
             return getTypeName().getId();
         } else {
-            return String.format("%s extends %s", getTypeName(), new JavaUtil().toDelimitedList(getBounds(), " & "));
+            String codeTypeBounds = StreamUtils.strings(getBounds())
+                    .collect(Collectors.joining(" & "));
+            return String.format("%s extends %s", getTypeName(), codeTypeBounds);
         }
     }
 

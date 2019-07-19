@@ -1,7 +1,7 @@
 package io.kpatel.algbeans;
 
 import io.kpatel.algbeans.entity.UnionType;
-import io.kpatel.algbeans.util.JavaUtil;
+import io.kpatel.algbeans.util.VelocityHelper;
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -25,7 +25,7 @@ public class CodeGenerator {
         templateUnion = velocityEngine.getTemplate("UnionTemplate.vm");
 
         context = new VelocityContext();
-        context.put("util", new JavaUtil());
+        context.put("util", new VelocityHelper());
 
 
     }
