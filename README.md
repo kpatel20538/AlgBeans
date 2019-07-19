@@ -9,6 +9,7 @@ AlgBeans is code generator that converts Haskell-like Type specification into JV
 $ ./gradlew build
 $ unzip ./build/distributions/AlgBeans-1.0-SNAPSHOT.zip
 $ ./AlgBeans-1.0-SNAPSHOT/bin/AlgBeans --in ./examples/basic_example.alg
+```
 
 One can move the generated package and use it as follows
 
@@ -33,7 +34,8 @@ See more in the examples folder.
 
 To include this library in your gradle project, add the following to your build.gradle file.
 
-* build.gradle *
+*build.gradle*
+
 ```groovy
 repositories {
     maven { url 'https://jitpack.io' }
